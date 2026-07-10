@@ -59,7 +59,6 @@
     }
     @media (max-width: 860px) {
       .hide-mobile { display: none !important; }
-      .grid-services { grid-template-columns: 1fr !important; }
       .grid-cases { grid-template-columns: 1fr !important; }
       .grid-about { grid-template-columns: 1fr !important; }
       .grid-process { grid-template-columns: 1fr !important; }
@@ -67,6 +66,9 @@
       .section-pad { padding-left: 20px !important; padding-right: 20px !important; }
       .ring-wrap { width: 100% !important; height: auto !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 16px !important; aspect-ratio: unset !important; }
       .ring-item { position: static !important; width: 260px !important; height: 260px !important; padding: 15% !important; }
+      .service-row button { padding: 20px !important; gap: 14px !important; }
+      .service-detail { padding-left: 20px !important; padding-right: 20px !important; }
+      .grid-service-points { grid-template-columns: 1fr !important; }
     }
     @media (max-width: 520px) {
       nav.section-pad { padding-left: 16px !important; padding-right: 16px !important; gap: 10px !important; }
@@ -127,10 +129,21 @@
       transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
     }
     .reveal.in-view { opacity: 1; transform: translateY(0); }
-    .grid-services > .reveal:nth-child(1) { transition-delay: 0.05s; }
-    .grid-services > .reveal:nth-child(2) { transition-delay: 0.15s; }
-    .grid-services > .reveal:nth-child(3) { transition-delay: 0.25s; }
-    .grid-services > .reveal:nth-child(4) { transition-delay: 0.35s; }
+    .services-list > .reveal:nth-child(1) { transition-delay: 0.05s; }
+    .services-list > .reveal:nth-child(2) { transition-delay: 0.15s; }
+    .services-list > .reveal:nth-child(3) { transition-delay: 0.25s; }
+    .services-list > .reveal:nth-child(4) { transition-delay: 0.35s; }
+
+    /* Services accordion: hover affordance + detail panel entrance */
+    .service-row button:hover { background: oklch(0.96 0.005 90); }
+    .service-detail {
+      animation: serviceDetailIn 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    @keyframes serviceDetailIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .grid-cases > .reveal:nth-child(1) { transition-delay: 0.05s; }
     .grid-cases > .reveal:nth-child(2) { transition-delay: 0.2s; }
     .grid-cases > .reveal:nth-child(3) { transition-delay: 0.35s; }
@@ -161,7 +174,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .reveal, .ring-item, .golden-ratio-svg circle { opacity: 1 !important; transform: none !important; transition: none !important; animation: none !important; }
+      .reveal, .ring-item, .golden-ratio-svg circle, .service-detail { opacity: 1 !important; transform: none !important; transition: none !important; animation: none !important; }
     }
   </style>
 </helmet>
@@ -229,23 +242,48 @@
       <p style="font-size: 15px; color: oklch(0.46 0.01 90); max-width: 380px; margin: 0;">{{ t.services.sub }}</p>
     </div>
 
-    <div class="grid-services" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: oklch(0.85 0.006 90); border: 1px solid oklch(0.85 0.006 90);">
+    <div class="services-list" style="display: flex; flex-direction: column; gap: 1px; background: oklch(0.85 0.006 90); border: 1px solid oklch(0.85 0.006 90);">
       <sc-for list="{{ t.services.items }}" as="svc" hint-placeholder-count="4">
-        <div class="reveal" style="background: oklch(0.98 0.004 85); padding: 40px; display: flex; flex-direction: column; gap: 18px; min-height: 240px;">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-family: 'Tektur', sans-serif; font-size: 13px; color: #A0C982; font-weight: 600;">{{ svc.index }}</span>
-            <svg width="26" height="26" viewBox="0 0 26 26">
+        <div class="reveal service-row" style="background: oklch(0.98 0.004 85);">
+          <button onClick="{{ svc.toggle }}" style="all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 24px; padding: 32px 40px;">
+            <span style="font-family: 'Tektur', sans-serif; font-size: 13px; color: #A0C982; font-weight: 600; flex-shrink: 0;">{{ svc.index }}</span>
+            <svg class="hide-mobile" width="30" height="30" viewBox="0 0 26 26" style="flex-shrink: 0;">
               <circle cx="13" cy="13" r="11" fill="none" stroke="oklch(0.75 0.01 90)" stroke-width="1.2"></circle>
               <circle cx="13" cy="13" r="11" fill="none" stroke="#A0C982" stroke-width="1.2" stroke-dasharray="{{ svc.dash }}" stroke-linecap="round" transform="rotate(-90 13 13)"></circle>
             </svg>
-          </div>
-          <h3 style="font-family: 'Tektur', sans-serif; font-size: 23px; font-weight: 600; letter-spacing: -0.01em; margin: 0;">{{ svc.title }}</h3>
-          <p style="font-size: 15px; line-height: 1.55; color: oklch(0.4 0.008 90); margin: 0; flex-grow: 1;">{{ svc.desc }}</p>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <sc-for list="{{ svc.tags }}" as="tag" hint-placeholder-count="2">
-              <span style="font-size: 12.5px; padding: 5px 12px; border: 1px solid oklch(0.8 0.008 90); border-radius: 100px; color: oklch(0.4 0.008 90);">{{ tag }}</span>
-            </sc-for>
-          </div>
+            <div style="flex: 1; min-width: 0; text-align: left;">
+              <h3 style="font-family: 'Tektur', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 6px;">{{ svc.title }}</h3>
+              <p style="font-size: 14.5px; line-height: 1.5; color: oklch(0.4 0.008 90); margin: 0;">{{ svc.desc }}</p>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 20 20" style="flex-shrink: 0; {{ svc.chevronStyle }}">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="#3B4A30" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          <sc-if value="{{ svc.isExpanded }}">
+            <div class="service-detail" style="padding: 0 40px 44px 94px;">
+              <h4 style="font-family: 'Tektur', sans-serif; font-size: 19px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.01em;">{{ svc.detail.heading }}</h4>
+              <p style="font-size: 15px; line-height: 1.55; color: oklch(0.4 0.008 90); max-width: 640px; margin: 0 0 28px;">{{ svc.detail.sub }}</p>
+              <p style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: oklch(0.46 0.01 90); margin: 0 0 16px;">{{ t.services.pointsLabel }}</p>
+              <div class="grid-service-points" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px 40px; margin-bottom: 32px;">
+                <sc-for list="{{ svc.detail.points }}" as="pt" hint-placeholder-count="4">
+                  <div>
+                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
+                      <span style="font-family: 'Tektur', sans-serif; font-size: 13px; color: #A0C982; font-weight: 600; flex-shrink: 0;">{{ pt.num }}</span>
+                      <h5 style="font-family: 'Tektur', sans-serif; font-size: 16px; font-weight: 600; margin: 0; letter-spacing: -0.005em;">{{ pt.title }}</h5>
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.55; color: oklch(0.4 0.008 90); margin: 0;">{{ pt.text }}</p>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="border-top: 1px solid oklch(0.85 0.006 90); padding-top: 24px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+                <div style="max-width: 560px;">
+                  <p style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: oklch(0.46 0.01 90); margin: 0 0 8px;">{{ t.services.howLabel }}</p>
+                  <p style="font-size: 14.5px; line-height: 1.55; color: oklch(0.4 0.008 90); margin: 0;">{{ svc.detail.how }}</p>
+                </div>
+                <a href="#contact" style="font-size: 14.5px; padding: 13px 24px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500; white-space: nowrap; flex-shrink: 0;">{{ svc.detail.cta }}</a>
+              </div>
+            </div>
+          </sc-if>
         </div>
       </sc-for>
     </div>
@@ -334,8 +372,8 @@
       <h2 style="font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 46px; letter-spacing: -0.02em; margin: 0 0 20px;">{{ t.contact.heading }}</h2>
       <p style="font-size: 16.5px; line-height: 1.6; color: oklch(0.4 0.008 90); margin: 0 0 40px;">{{ t.contact.sub }}</p>
       <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <a href="https://t.me/ailanastudio" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.telegram }}</a>
-        <a href="mailto:hello@ailana.design" style="font-size: 15px; padding: 15px 28px; border: 1px solid #3B4A30; color: #3B4A30; border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.email }}</a>
+        <a href="https://t.me/ambr0se_spellman" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.telegram }}</a>
+        <a href="mailto:kaparbekosaikal@gmail.com" style="font-size: 15px; padding: 15px 28px; border: 1px solid #3B4A30; color: #3B4A30; border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.email }}</a>
         <a href="#" style="font-size: 15px; padding: 15px 28px; border: 1px solid #3B4A30; color: #3B4A30; border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.portfolio }}</a>
       </div>
     </div>
@@ -363,11 +401,69 @@ const DATA = {
     services: {
       heading: 'Services',
       sub: 'Four stages, one continuous cycle — each engagement can start wherever your product needs it.',
+      pointsLabel: 'What you get:',
+      howLabel: 'How it works:',
       items: [
-        { title: 'Discovery & Brief', desc: 'We work with the client to clarify the brief, context and expectations, framing the problem and the goal. From there we define hypotheses and key questions that set the direction for research.', tags: ['Discovery', 'Brief'], dash: '18 61' },
-        { title: 'Research & Insights', desc: 'We study users and context through interviews, observation, analytics and other methods. For each project we choose the stages and methods that fit, so the process stays flexible.', tags: ['Research', 'Insights'], dash: '36 61' },
-        { title: 'Concept & UX Design', desc: 'We turn insights into a coherent product structure, building UX flows, scenarios and information architecture. The focus is a user experience that is clear, logical and consistent.', tags: ['Concept', 'UX'], dash: '54 61' },
-        { title: 'Interface & Design Systems', desc: 'We build UI, components and design-system libraries that keep every screen and team consistent. Style, tone and patterns are documented so the product can scale.', tags: ['UI', 'Systems'], dash: '69 69' },
+        {
+          title: 'Discovery & Brief', desc: 'We work with the client to clarify the brief, context and expectations, framing the problem and the goal. From there we define hypotheses and key questions that set the direction for research.', tags: ['Discovery', 'Brief'], dash: '18 61',
+          detail: {
+            heading: 'Discovery & Brief',
+            sub: 'Working sessions with your team — clarifying the task before it collects extra features and rework.',
+            points: [
+              { title: 'One brief, not three versions across different chats', text: 'We fix the goal, constraints and success criteria in a single document the whole team can point to.' },
+              { title: 'Hypotheses instead of gut-feel assumptions', text: "We define exactly what we're testing and why — so the next stage (research) answers specific questions instead of guessing." },
+              { title: "Project scope set before it starts, not midway through", text: "It's clear upfront what's in scope and what's a separate conversation and change order." },
+              { title: 'A shared language between business and the dev team', text: 'The brief makes sense to the product manager, the designer and the developer alike — fewer "that\'s not what I meant" moments halfway through.' },
+            ],
+            how: 'We run a series of structured sessions with key stakeholders — from founder interviews to workshops with the team. The result is a single brief with hypotheses and questions that feed into research.',
+            cta: 'Discuss the brief →',
+          },
+        },
+        {
+          title: 'Research & Insights', desc: 'We study users and context through interviews, observation, analytics and other methods. For each project we choose the stages and methods that fit, so the process stays flexible.', tags: ['Research', 'Insights'], dash: '36 61',
+          detail: {
+            heading: 'UX Research',
+            sub: 'One-on-one interviews and usability testing with real users — wherever suits your team: remote or on-site.',
+            points: [
+              { title: 'Clarity on where users get lost', text: 'Instead of assumptions — concrete points in the flow where people get confused, abandon the task, or turn to a competitor.' },
+              { title: 'Priorities instead of chaos', text: 'Not a list of 50 "would be nice to improve," but a ranked list of what to fix first and why.' },
+              { title: 'Hypothesis testing before expensive development', text: "It's cheaper to test an idea on a prototype than to rebuild a finished product after launch." },
+              { title: 'A report with decisions, not just observations', text: 'Every insight comes with a concrete recommendation for what to do next.' },
+            ],
+            how: 'We run usability testing and user interviews. For larger-scale research (quantitative testing, bigger samples) we bring in research partners for the specific task.',
+            cta: 'Discuss research →',
+          },
+        },
+        {
+          title: 'Concept & UX Design', desc: 'We turn insights into a coherent product structure, building UX flows, scenarios and information architecture. The focus is a user experience that is clear, logical and consistent.', tags: ['Concept', 'UX'], dash: '54 61',
+          detail: {
+            heading: 'Concept & UX Design',
+            sub: 'From insights and brief to product structure — flows, scenarios and logic that hold together on their own.',
+            points: [
+              { title: 'A map of user scenarios instead of disconnected screens', text: 'You see how a user moves from point A to the goal, not a set of mockups with no connection between them.' },
+              { title: "Information architecture that doesn't collapse as you grow", text: "The structure is built with headroom — adding new sections doesn't mean rebuilding everything from scratch." },
+              { title: 'A clickable prototype to test with real users', text: 'The decision gets validated before expensive development — on a prototype people can actually try.' },
+              { title: 'UX logic documented for the team', text: 'Every decision comes with the reasoning behind it, not just "because it looks better."' },
+            ],
+            how: 'We build UX flows and scenarios based on the research, assemble a clickable prototype in Figma, and test key scenarios with users before moving on to the interface.',
+            cta: 'Discuss the concept →',
+          },
+        },
+        {
+          title: 'Interface & Design Systems', desc: 'We build UI, components and design-system libraries that keep every screen and team consistent. Style, tone and patterns are documented so the product can scale.', tags: ['UI', 'Systems'], dash: '69 69',
+          detail: {
+            heading: 'Interface & Design Systems',
+            sub: "UI and a component library that don't fall apart with every new screen and every new designer on the team.",
+            points: [
+              { title: 'One visual language across every screen', text: 'Buttons, fields and cards look and behave the same — no matter who on the team built the screen.' },
+              { title: 'A component library instead of screens built from scratch', text: 'New screens are assembled from ready-made blocks — faster and cheaper than drawing each one from zero.' },
+              { title: 'Documentation that outlasts a designer leaving the team', text: 'Style, tone and patterns are fixed in writing — a new team member doesn\'t spend a week figuring out "how things were done here."' },
+              { title: 'An interface ready to hand off to development', text: "Component specs and states are described clearly enough that developers aren't left to guess the gaps." },
+            ],
+            how: 'We build a UI kit and component library in Figma, cover key states (empty, loading, error), and hand it off with documentation for designers and developers.',
+            cta: 'Discuss the design system →',
+          },
+        },
       ],
     },
     cases: {
@@ -423,11 +519,69 @@ const DATA = {
     services: {
       heading: 'Услуги',
       sub: 'Четыре этапа одного непрерывного цикла — работа может начаться с любого из них, в зависимости от задачи.',
+      pointsLabel: 'Что вы получите:',
+      howLabel: 'Как это устроено:',
       items: [
-        { title: 'Дискавери и бриф', desc: 'Вместе с клиентом уточняем бриф, контекст и ожидания, чтобы прояснить проблему и цель. Определяем гипотезы и ключевые вопросы под конкретный проект, задавая направление для дальнейшего исследования.', tags: ['Дискавери', 'Бриф'], dash: '18 61' },
-        { title: 'Исследование и инсайты', desc: 'Изучаем пользователей и контекст через интервью, наблюдения, аналитику и другие методы. Для каждого проекта подбираем подходящие этапы и методы исследования, поэтому процесс всегда остаётся гибким.', tags: ['Исследование', 'Инсайты'], dash: '36 61' },
-        { title: 'Концепция и UX-дизайн', desc: 'Превращаем инсайты в цельную структуру продукта, выстраивая UX-флоу, сценарии и информационную архитектуру. Уделяем внимание тому, чтобы пользовательский опыт был понятным, логичным и последовательным.', tags: ['Концепция', 'UX'], dash: '54 61' },
-        { title: 'Интерфейс и дизайн-системы', desc: 'Создаём UI, компоненты и библиотеки дизайн-систем, обеспечивающие единообразие на всех экранах и во всей команде. Помогаем масштабировать продукт через системные интерфейсы с задокументированным стилем, тоном и паттернами.', tags: ['UI', 'Системы'], dash: '69 69' },
+        {
+          title: 'Дискавери и бриф', desc: 'Вместе с клиентом уточняем бриф, контекст и ожидания, чтобы прояснить проблему и цель. Определяем гипотезы и ключевые вопросы под конкретный проект, задавая направление для дальнейшего исследования.', tags: ['Дискавери', 'Бриф'], dash: '18 61',
+          detail: {
+            heading: 'Дискавери и бриф',
+            sub: 'Совместные сессии с командой клиента — проясняем задачу до того, как она обрастёт лишними фичами и переделками.',
+            points: [
+              { title: 'Один бриф, а не три версии в разных чатах', text: 'Фиксируем цель, ограничения и критерии успеха в одном документе, на который можно ссылаться всей команде.' },
+              { title: 'Гипотезы вместо предположений «на глаз»', text: 'Формулируем, что именно проверяем и зачем — чтобы следующий этап (исследование) не гадал, а отвечал на конкретные вопросы.' },
+              { title: 'Границы проекта до старта, а не посреди него', text: 'Заранее видно, что входит в объём работ, а что — повод для отдельного разговора и допсоглашения.' },
+              { title: 'Общий язык между бизнесом и командой разработки', text: 'Бриф понятен и продакт-менеджеру, и дизайнеру, и разработчику — меньше «я не это имел в виду» на середине проекта.' },
+            ],
+            how: 'Проводим серию структурированных сессий с ключевыми стейкхолдерами — от интервью с основателями до воркшопов с командой. Результат — единый бриф с гипотезами и вопросами, которые ведут в исследование.',
+            cta: 'Обсудить бриф →',
+          },
+        },
+        {
+          title: 'Исследование и инсайты', desc: 'Изучаем пользователей и контекст через интервью, наблюдения, аналитику и другие методы. Для каждого проекта подбираем подходящие этапы и методы исследования, поэтому процесс всегда остаётся гибким.', tags: ['Исследование', 'Инсайты'], dash: '36 61',
+          detail: {
+            heading: 'UX-исследования',
+            sub: 'Личные интервью и тестирование с реальными пользователями — там, где удобно вашей команде: удалённо или на площадке.',
+            points: [
+              { title: 'Ясность, где теряются пользователи', text: 'Вместо предположений — конкретные точки в сценарии, где люди путаются, бросают задачу или уходят к конкуренту.' },
+              { title: 'Приоритеты вместо хаоса', text: 'Не список из 50 «было бы неплохо улучшить», а ранжированный список: что чинить в первую очередь и почему.' },
+              { title: 'Проверка гипотезы до дорогой разработки', text: 'Дешевле протестировать идею на прототипе, чем переделывать готовый продукт после запуска.' },
+              { title: 'Отчёт с решениями, не просто наблюдениями', text: 'Каждый инсайт — с конкретной рекомендацией, что делать дальше.' },
+            ],
+            how: 'Проводим юзабилити-тестирование и интервью с пользователями. Для более масштабных исследований (количественные тесты, большие выборки) подключаем партнёров-исследователей под конкретную задачу.',
+            cta: 'Обсудить исследование →',
+          },
+        },
+        {
+          title: 'Концепция и UX-дизайн', desc: 'Превращаем инсайты в цельную структуру продукта, выстраивая UX-флоу, сценарии и информационную архитектуру. Уделяем внимание тому, чтобы пользовательский опыт был понятным, логичным и последовательным.', tags: ['Концепция', 'UX'], dash: '54 61',
+          detail: {
+            heading: 'Концепция и UX-дизайн',
+            sub: 'От инсайтов и брифа — к структуре продукта: флоу, сценариям и логике, которая держится сама на себе.',
+            points: [
+              { title: 'Карту пользовательских сценариев вместо разрозненных экранов', text: 'Видно, как пользователь идёт от точки А до цели, а не набор макетов без связи между собой.' },
+              { title: 'Информационную архитектуру, которая не рассыпается при росте', text: 'Структура закладывается с запасом — добавление новых разделов не требует пересобирать всё заново.' },
+              { title: 'Кликабельный прототип для проверки на реальных пользователях', text: 'Решение проверяется до дорогой разработки — на прототипе, который можно «потрогать».' },
+              { title: 'UX-логику, задокументированную для команды', text: 'Каждое решение — с обоснованием, почему сделано именно так, а не просто «потому что так выглядит лучше».' },
+            ],
+            how: 'Строим UX-флоу и сценарии на основе исследования, собираем кликабельный прототип в Figma и тестируем ключевые сценарии с пользователями перед тем, как переходить к интерфейсу.',
+            cta: 'Обсудить концепцию →',
+          },
+        },
+        {
+          title: 'Интерфейс и дизайн-системы', desc: 'Создаём UI, компоненты и библиотеки дизайн-систем, обеспечивающие единообразие на всех экранах и во всей команде. Помогаем масштабировать продукт через системные интерфейсы с задокументированным стилем, тоном и паттернами.', tags: ['UI', 'Системы'], dash: '69 69',
+          detail: {
+            heading: 'Интерфейс и дизайн-системы',
+            sub: 'UI и библиотека компонентов, которые не расползаются с каждым новым экраном и каждым новым дизайнером в команде.',
+            points: [
+              { title: 'Единый визуальный язык на всех экранах', text: 'Кнопки, поля и карточки выглядят и ведут себя одинаково — независимо от того, кто из команды делал экран.' },
+              { title: 'Библиотеку компонентов вместо созданных с нуля экранов', text: 'Новые экраны собираются из готовых блоков — это быстрее и дешевле, чем каждый раз рисовать с нуля.' },
+              { title: 'Документацию, которая переживает уход дизайнера из команды', text: 'Стиль, тон и паттерны зафиксированы — новый человек в команде подключается без недели «а как тут было принято».' },
+              { title: 'Интерфейс, готовый к передаче в разработку', text: 'Спецификации и состояния компонентов описаны так, что разработчик не должен додумывать недостающее.' },
+            ],
+            how: 'Собираем UI-кит и библиотеку компонентов в Figma, покрываем ключевые состояния (пустое, загрузка, ошибка) и передаём с документацией для дизайнеров и разработчиков.',
+            cta: 'Обсудить дизайн-систему →',
+          },
+        },
       ],
     },
     cases: {
@@ -483,11 +637,65 @@ const DATA = {
     services: {
       heading: 'Кызматтар',
       sub: 'Бир циклдин төрт баскычы — иш тапшырмага жараша ар башка баскычтан башталышы мумкун.',
+      pointsLabel: 'Эмне аласыз:',
+      howLabel: 'Кантип иштейт:',
       items: [
-        { title: 'Дискавери жана бриф', desc: 'Көйгөйдү жана максатты тактоо үчүн кардар менен биргеликте бриф, контекст жана күтүүлөрдү тактап чыгабыз. Проектке ылайык гипотезаларды жана негизги суроолорду аныктап, кийинки изилдөөнүн багытын белгилейбиз.', tags: ['Дискавери', 'Бриф'], dash: '18 61' },
-        { title: 'Изилдөө жана инсайттар', desc: 'Колдонуучуларды изилдеп, контекстти түшүнүү үчүн интервьюлар, байкоолор, аналитика жана башка ыкмаларды колдонобуз. Ар бир проект үчүн ылайыктуу этаптарды жана изилдөө методдорун тандайбыз, ошондуктан процесс ар дайым ийкемдүү бойдон калат.', tags: ['Изилдөө', 'Инсайттар'], dash: '36 61' },
-        { title: 'Концепция жана UX-дизайн', desc: 'Инсайттарды продуктунун бүтүндүк түзүмүнө айлантып, UX flow’лорду, сценарийлерди жана маалымат архитектурасын курабыз. Колдонуучунун тажрыйбасын так, логикалык жана туруктуу кылууга көңүл бурабыз.', tags: ['Концепция', 'UX'], dash: '54 61' },
-        { title: 'Интерфейс жана дизайн системалары', desc: 'Бардык экрандарда жана командаларда бирдейликти камсыз кылган UI, компоненттер жана дизайн-системалар үчүн китепканаларды түзөбүз. Стиль, тону жана үлгүлөрү документтештирилген системдүү интерфейстер аркылуу продуктту масштабдоого жардам беребиз.', tags: ['UI', 'Системалар'], dash: '69 69' },
+        { title: 'Дискавери жана бриф', desc: 'Көйгөйдү жана максатты тактоо үчүн кардар менен биргеликте бриф, контекст жана күтүүлөрдү тактап чыгабыз. Проектке ылайык гипотезаларды жана негизги суроолорду аныктап, кийинки изилдөөнүн багытын белгилейбиз.', tags: ['Дискавери', 'Бриф'], dash: '18 61',
+          detail: {
+            heading: 'Дискавери жана бриф',
+            sub: 'Кардардын командасы менен биргелешкен сессиялар — милдетти анык кылабыз, ал кошумча функцияларга жана кайра иштетүүлөргө чөгүп кетмейинче.',
+            points: [
+              { title: 'Бир бриф, ар кандай чаттардагы үч версия эмес', text: 'Максатты, чектөөлөрдү жана ийгилик критерийлерин бир документте бекитебиз — бүт команда ага таяна алат.' },
+              { title: '«Көз менен» болжолдоонун ордуна гипотезалар', text: 'Эмнени так текшерерибизди жана эмне үчүн экенин аныктайбыз — кийинки этап (изилдөө) болжолдобойт, а так суроолорго жооп берет.' },
+              { title: 'Долбоордун чектери башталганда эле белгилүү, ортосунда эмес', text: 'Эмне долбоордун көлөмүнө кирерин, эмне өзүнчө сүйлөшүүнү жана кошумча макулдашууну талап кыларын алдын ала көрөбүз.' },
+              { title: 'Бизнес менен иштеп чыгуу командасынын ортосундагы жалпы тил', text: 'Бриф продукт-менеджерге да, дизайнерге да, разработчикке да түшүнүктүү — долбоордун ортосунда «мен муну айткан эмесмин» деген учурлар азаят.' },
+            ],
+            how: 'Негизги стейкхолдерлер менен түзүмдүү сессиялардын катарын өткөрөбүз — негиздөөчүлөр менен интервьюдан баштап, команда менен воркшоптарга чейин. Натыйжада — гипотезалары жана изилдөөгө багыт берүүчү суроолору бар бирдиктүү бриф.',
+            cta: 'Брифти талкуулоо →',
+          },
+        },
+        { title: 'Изилдөө жана инсайттар', desc: 'Колдонуучуларды изилдеп, контекстти түшүнүү үчүн интервьюлар, байкоолор, аналитика жана башка ыкмаларды колдонобуз. Ар бир проект үчүн ылайыктуу этаптарды жана изилдөө методдорун тандайбыз, ошондуктан процесс ар дайым ийкемдүү бойдон калат.', tags: ['Изилдөө', 'Инсайттар'], dash: '36 61',
+          detail: {
+            heading: 'UX-изилдөөлөр',
+            sub: 'Чыныгы колдонуучулар менен жеке интервьюлар жана тестирлөө — командаңызга ыңгайлуу форматта: алыстан же жайгашкан жеринде.',
+            points: [
+              { title: 'Колдонуучулар кайда адашарын так билүү', text: 'Болжолдоонун ордуна — сценарийдеги так пункттар, ал жерде адамдар чаташат, тапшырманы таштайт же атаандашка кетет.' },
+              { title: 'Хаостун ордуна артыкчылыктар', text: '50 «жакшыртса болмок эле» деген тизме эмес, а биринчи кезекте эмнени оңдоо керек жана эмне үчүн экенин көрсөткөн рангдалган тизме.' },
+              { title: 'Кымбат иштеп чыгууга чейин гипотезаны текшерүү', text: 'Идеяны прототипте текшерүү, продукт чыгарылгандан кийин аны кайра курганга караганда арзаныраак.' },
+              { title: 'Жөн гана байкоолор эмес, чечимдери бар отчёт', text: 'Ар бир инсайт — андан ары эмне кылуу керектиги боюнча так сунуш менен коштолот.' },
+            ],
+            how: 'Юзабилити-тестирлөө жана колдонуучулар менен интервью өткөрөбүз. Масштабдуу изилдөөлөр үчүн (сандык тесттер, чоң тандоолор) так тапшырма боюнча изилдөөчү-өнөктөштөрдү тартабыз.',
+            cta: 'Изилдөөнү талкуулоо →',
+          },
+        },
+        { title: 'Концепция жана UX-дизайн', desc: 'Инсайттарды продуктунун бүтүндүк түзүмүнө айлантып, UX flow’лорду, сценарийлерди жана маалымат архитектурасын курабыз. Колдонуучунун тажрыйбасын так, логикалык жана туруктуу кылууга көңүл бурабыз.', tags: ['Концепция', 'UX'], dash: '54 61',
+          detail: {
+            heading: 'Концепция жана UX-дизайн',
+            sub: 'Инсайттардан жана брифтен — продукттун түзүмүнө: өзүнчө кармалып турган флоулор, сценарийлер жана логика.',
+            points: [
+              { title: 'Байланышы жок экрандардын ордуна колдонуучу сценарийлеринин картасы', text: 'Колдонуучу А чекитинен максатка чейин кантип жүрөрү көрүнөт, а бири-бири менен байланышы жок макеттердин топтому эмес.' },
+              { title: 'Өсүү менен чачылып кетпеген маалымат архитектурасы', text: 'Түзүм запас менен курулат — жаңы бөлүмдөрдү кошуу баарын кайрадан куруу дегенди билдирбейт.' },
+              { title: 'Чыныгы колдонуучулар менен текшерүү үчүн басууга болгон прототип', text: 'Чечим кымбат иштеп чыгууга чейин текшерилет — колго кармап көрүүгө болгон прототиптте.' },
+              { title: 'Команда үчүн документтештирилген UX-логика', text: 'Ар бир чечим «ушундай жакшыраак көрүнөт» дегендин ордуна, эмне үчүн так ушундай кабыл алынганынын негиздемеси менен келет.' },
+            ],
+            how: 'Изилдөөнүн негизинде UX-флоуларды жана сценарийлерди курабыз, Figma’да басууга болгон прототип чогултабыз жана интерфейске өтөрдөн мурун негизги сценарийлерди колдонуучулар менен текшеребиз.',
+            cta: 'Концепцияны талкуулоо →',
+          },
+        },
+        { title: 'Интерфейс жана дизайн системалары', desc: 'Бардык экрандарда жана командаларда бирдейликти камсыз кылган UI, компоненттер жана дизайн-системалар үчүн китепканаларды түзөбүз. Стиль, тону жана үлгүлөрү документтештирилген системдүү интерфейстер аркылуу продуктту масштабдоого жардам беребиз.', tags: ['UI', 'Системалар'], dash: '69 69',
+          detail: {
+            heading: 'Интерфейс жана дизайн системалары',
+            sub: 'Ар бир жаңы экран жана ар бир жаңы дизайнер менен чачылып кетпеген UI жана компоненттер китепканасы.',
+            points: [
+              { title: 'Бардык экрандарда бирдиктүү визуалдык тил', text: 'Баскычтар, талаалар жана карталар бирдей көрүнөт жана иштейт — командадан ким экранды жасаганына карабастан.' },
+              { title: 'Нөлдөн жасалган экрандардын ордуна компоненттер китепканасы', text: 'Жаңы экрандар даяр блоктордон чогултулат — бул ар дайым нөлдөн тартып сүрөттөгөнгө караганда тезирээк жана арзаныраак.' },
+              { title: 'Дизайнер команданы таштап кеткенден кийин да иштей турган документация', text: 'Стиль, тон жана үлгүлөр жазуу түрүндө бекитилген — командадагы жаңы адам «мында мурда кантип иштелчү эле» дегенди бир жума изилдебейт.' },
+              { title: 'Иштеп чыгууга тапшырууга даяр интерфейс', text: 'Компоненттердин спецификациялары жана абалдары так сүрөттөлгөн — разработчик жетишпеген нерселерди өзү ойлоп табышы керек болбойт.' },
+            ],
+            how: 'Figma’да UI-кит жана компоненттер китепканасын курабыз, негизги абалдарды (бош, жүктөлүү, ката) камтыйбыз жана дизайнерлер менен разработчиктер үчүн документация менен тапшырабыз.',
+            cta: 'Дизайн системасын талкуулоо →',
+          },
+        },
       ],
     },
     cases: {
@@ -544,15 +752,30 @@ function detectDefaultLang() {
 }
 
 class Component extends DCLogic {
-  state = { lang: detectDefaultLang() };
+  state = { lang: detectDefaultLang(), expandedServices: {} };
 
   renderVals() {
     const lang = this.state.lang;
     const raw = DATA[lang];
+    const expandedServices = this.state.expandedServices || {};
 
     const services = {
       ...raw.services,
-      items: raw.services.items.map((s, i) => ({ ...s, index: String(i + 1).padStart(2, '0') })),
+      items: raw.services.items.map((s, i) => ({
+        ...s,
+        index: String(i + 1).padStart(2, '0'),
+        isExpanded: !!expandedServices[i],
+        chevronStyle: `transition: transform 0.3s ease; transform: rotate(${expandedServices[i] ? 180 : 0}deg);`,
+        toggle: () => {
+          const next = { ...(this.state.expandedServices || {}) };
+          next[i] = !next[i];
+          this.setState({ expandedServices: next });
+        },
+        detail: s.detail ? {
+          ...s.detail,
+          points: s.detail.points.map((p, j) => ({ ...p, num: String(j + 1).padStart(2, '0') })),
+        } : undefined,
+      })),
     };
 
     const cases = {
