@@ -960,6 +960,11 @@ class Component extends DCLogic {
 </script>
 <script>
 (function () {
+  var pageScriptStart = Date.now();
+  var MIN_PRELOADER_MS = 1400; // On a fast/cached load React can be ready in
+  // under 200ms, which makes the ripple preloader flash by unnoticed. Hold
+  // it up for at least this long so the animation actually gets seen.
+
   // The dc-runtime can (re)render the page's DOM after this script first runs
   // (it boots after an async React load, then re-renders again after an
   // internal template refetch). So rather than grabbing elements once, we
@@ -1017,14 +1022,18 @@ class Component extends DCLogic {
     // about. #dc-root is the container the runtime creates specifically
     // when it replaces the dc template element with the real, rendered React tree.
     if (!document.getElementById('dc-root')) return;
-    // Not a one-shot: the runtime's internal refresh cycle can reinsert a
-    // fresh #preloader-less-marked node later, so keep checking on every
-    // scan instead of trusting a single "already handled" flag.
+    // Marking the element itself (rather than a single module-level flag)
+    // keeps this self-healing if the runtime's internal refresh cycle ever
+    // reinserts a fresh, unmarked #preloader later.
     var el = document.getElementById('preloader');
-    if (!el || el.classList.contains('preloader-hidden')) return;
-    el.classList.add('preloader-hidden');
-    el.addEventListener('transitionend', function () { if (el.parentNode) el.remove(); }, { once: true });
-    setTimeout(function () { if (el.parentNode) el.remove(); }, 800);
+    if (!el || el.dataset.hideScheduled) return;
+    el.dataset.hideScheduled = '1';
+    var remaining = Math.max(0, MIN_PRELOADER_MS - (Date.now() - pageScriptStart));
+    setTimeout(function () {
+      el.classList.add('preloader-hidden');
+      el.addEventListener('transitionend', function () { if (el.parentNode) el.remove(); }, { once: true });
+      setTimeout(function () { if (el.parentNode) el.remove(); }, 800);
+    }, remaining);
   }
 
   function scanAll() {
