@@ -28,6 +28,50 @@
 <meta name="twitter:title" content="Ailana Design Agency — Full-Cycle Product Design Studio">
 <meta name="twitter:description" content="Discovery, research, UX/UI design and design systems for digital products — one continuous cycle, from brief to delivery.">
 <link rel="icon" type="image/svg+xml" href="uploads/Logo.svg">
+
+<style>
+  /* Preloader lives outside the dc template element on purpose: the dc-runtime
+     hides that element and replaces its contents only once it finishes booting
+     (after an async React-from-CDN load), so anything meant to be visible
+     before that point has to sit outside it with its own plain CSS. */
+  #preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: oklch(0.98 0.004 85);
+    transition: opacity 0.5s ease;
+  }
+  #preloader svg { width: 180px; height: 180px; }
+  #preloader circle {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0.85);
+    animation: preloaderRipple 2.4s ease-in-out infinite;
+  }
+  @keyframes preloaderRipple {
+    0% { opacity: 0; transform: scale(0.85); }
+    18% { opacity: 1; transform: scale(1); }
+    55% { opacity: 0.2; }
+    100% { opacity: 0; transform: scale(1.08); }
+  }
+  #preloader circle:nth-child(1) { animation-delay: 0s; }
+  #preloader circle:nth-child(2) { animation-delay: 0.15s; }
+  #preloader circle:nth-child(3) { animation-delay: 0.3s; }
+  #preloader circle:nth-child(4) { animation-delay: 0.45s; }
+  #preloader circle:nth-child(5) { animation-delay: 0.6s; }
+  #preloader circle:nth-child(6) { animation-delay: 0.75s; }
+  #preloader circle:nth-child(7) { animation-delay: 0.9s; }
+  #preloader circle:nth-child(8) { animation-delay: 1.05s; }
+  #preloader.preloader-hidden { opacity: 0; pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) {
+    #preloader circle { animation: none !important; opacity: 0.5 !important; transform: none !important; }
+  }
+</style>
+
 <script src="./support.js"></script>
 </head>
 <body>
@@ -44,6 +88,19 @@
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/110515935" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+
+<div id="preloader" aria-hidden="true">
+  <svg viewBox="0 0 933 933" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="466.17" cy="466.17" r="11.7109" stroke="#A0C982" stroke-width="4"/>
+    <circle cx="466.17" cy="466.17" r="25.4218" stroke="#A0C982" stroke-width="4"/>
+    <circle cx="466.17" cy="466.17" r="39.1327" stroke="#A0C982" stroke-width="4"/>
+    <circle cx="466.17" cy="466.17" r="66.5544" stroke="#A0C982" stroke-width="4"/>
+    <circle cx="466.17" cy="466.17" r="107.687" stroke="#A0C982" stroke-width="4"/>
+    <circle cx="466.17" cy="466.171" r="176.242" stroke="#A0C982" stroke-width="4"/>
+    <circle cx="466.17" cy="466.17" r="285.929" stroke="#A0C982" stroke-width="4"/>
+    <circle cx="466.17" cy="466.171" r="464.17" stroke="#A0C982" stroke-width="4"/>
+  </svg>
+</div>
 <x-dc>
 <helmet>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -882,10 +939,29 @@ class Component extends DCLogic {
     }
   }
 
+  function hidePreloaderWhenReady() {
+    // Checking for a plain `nav` (or most other selectors) is not enough:
+    // the raw dc template markup — including its literal, un-rendered
+    // nav with {{ }} placeholders — exists in the DOM from initial parse
+    // and merely gets display:none'd, which querySelector doesn't care
+    // about. #dc-root is the container the runtime creates specifically
+    // when it replaces the dc template element with the real, rendered React tree.
+    if (!document.getElementById('dc-root')) return;
+    // Not a one-shot: the runtime's internal refresh cycle can reinsert a
+    // fresh #preloader-less-marked node later, so keep checking on every
+    // scan instead of trusting a single "already handled" flag.
+    var el = document.getElementById('preloader');
+    if (!el || el.classList.contains('preloader-hidden')) return;
+    el.classList.add('preloader-hidden');
+    el.addEventListener('transitionend', function () { if (el.parentNode) el.remove(); }, { once: true });
+    setTimeout(function () { if (el.parentNode) el.remove(); }, 800);
+  }
+
   function scanAll() {
     scanRing();
     scanReveal();
     updateCasesProgress();
+    hidePreloaderWhenReady();
   }
 
   var ticking = false;
