@@ -111,8 +111,62 @@
     html { scroll-behavior: smooth; }
     body { margin: 0; }
     ::selection { background: #A0C982; color: oklch(0.99 0.003 90); }
+    .mobile-menu-btn { display: none; }
     @media (max-width: 1180px) {
       .nav-links { display: none !important; }
+      .mobile-menu-btn { display: inline-flex !important; }
+    }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: oklch(0.98 0.004 85);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+    .mobile-menu-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .mobile-menu-close {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .mobile-menu-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      transform: translateY(18px);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
+    }
+    .mobile-menu-overlay.open .mobile-menu-panel {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .mobile-menu-link {
+      font-family: 'Tektur', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #3B4A30;
+      text-decoration: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mobile-menu-overlay, .mobile-menu-panel { transition: none !important; }
     }
     @media (max-width: 860px) {
       .hide-mobile { display: none !important; }
@@ -130,6 +184,7 @@
     @media (max-width: 520px) {
       nav.section-pad { padding-left: 16px !important; padding-right: 16px !important; gap: 10px !important; }
       .nav-contact-btn { display: none !important; }
+      .nav-logo-text { display: none !important; }
     }
 
     /* Hero golden-ratio circles: fade in one by one on page load, once. */
@@ -242,7 +297,7 @@
   <nav style="position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: oklch(0.98 0.004 85 / 0.86); backdrop-filter: blur(10px); border-bottom: 1px solid oklch(0.85 0.006 90); gap: 20px;" class="section-pad">
     <a href="#top" style="font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.01em; color: #3B4A30; text-decoration: none; display: flex; align-items: center; gap: 9px; flex-shrink: 0;">
       <img src="uploads/Logo.svg" alt="Ailana logo" width="22" height="22" style="flex-shrink: 0; display: block;">
-      Ailana Design Agency
+      <span class="nav-logo-text">Ailana Design Agency</span>
     </a>
     <div class="nav-links" style="display: flex; gap: 34px; font-size: 14.5px;">
       <a href="#services" style="color: #3B4A30; text-decoration: none;">{{ t.nav.services }}</a>
@@ -258,8 +313,28 @@
         </sc-for>
       </div>
       <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" class="nav-contact-btn" style="font-size: 14px; padding: 9px 18px; border: 1px solid #3B4A30; border-radius: 100px; text-decoration: none; color: #3B4A30; white-space: nowrap;">{{ t.nav.contactBtn }}</a>
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu" style="background: none; border: none; cursor: pointer; padding: 4px; flex-shrink: 0; align-items: center; justify-content: center;">
+        <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M5.625 27C5.625 26.7016 5.74353 26.4155 5.95451 26.2045C6.16548 25.9935 6.45163 25.875 6.75 25.875H29.25C29.5484 25.875 29.8345 25.9935 30.0455 26.2045C30.2565 26.4155 30.375 26.7016 30.375 27C30.375 27.2984 30.2565 27.5845 30.0455 27.7955C29.8345 28.0065 29.5484 28.125 29.25 28.125H6.75C6.45163 28.125 6.16548 28.0065 5.95451 27.7955C5.74353 27.5845 5.625 27.2984 5.625 27ZM5.625 18C5.625 17.7016 5.74353 17.4155 5.95451 17.2045C6.16548 16.9935 6.45163 16.875 6.75 16.875H29.25C29.5484 16.875 29.8345 16.9935 30.0455 17.2045C30.2565 17.4155 30.375 17.7016 30.375 18C30.375 18.2984 30.2565 18.5845 30.0455 18.7955C29.8345 19.0065 29.5484 19.125 29.25 19.125H6.75C6.45163 19.125 6.16548 19.0065 5.95451 18.7955C5.74353 18.5845 5.625 18.2984 5.625 18ZM5.625 9C5.625 8.70163 5.74353 8.41548 5.95451 8.20451C6.16548 7.99353 6.45163 7.875 6.75 7.875H29.25C29.5484 7.875 29.8345 7.99353 30.0455 8.20451C30.2565 8.41548 30.375 8.70163 30.375 9C30.375 9.29837 30.2565 9.58452 30.0455 9.79549C29.8345 10.0065 29.5484 10.125 29.25 10.125H6.75C6.45163 10.125 6.16548 10.0065 5.95451 9.79549C5.74353 9.58452 5.625 9.29837 5.625 9V9Z" fill="#3B4A30"/>
+        </svg>
+      </button>
     </div>
   </nav>
+
+  <div id="mobile-menu-overlay" class="mobile-menu-overlay" aria-hidden="true">
+    <button class="mobile-menu-close" aria-label="Close menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M2 2L20 20M20 2L2 20" stroke="#3B4A30" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="mobile-menu-panel">
+      <a href="#services" class="mobile-menu-link">{{ t.nav.services }}</a>
+      <a href="#cases" class="mobile-menu-link">{{ t.nav.cases }}</a>
+      <a href="#process" class="mobile-menu-link">{{ t.nav.process }}</a>
+      <a href="#about" class="mobile-menu-link">{{ t.nav.about }}</a>
+      <a href="#contact" class="mobile-menu-link">{{ t.nav.contact }}</a>
+    </div>
+  </div>
 
   <!-- HERO -->
   <section id="top" style="position: relative; padding: 120px 48px 100px; max-width: 1240px; margin: 0 auto;" class="section-pad">
@@ -424,7 +499,7 @@
 
   <!-- CONTACT -->
   <section id="contact" style="padding: 120px 48px 100px; max-width: 1240px; margin: 0 auto; position: relative;" class="section-pad">
-    <img src="uploads/Group 15886-101fd2e1.png" alt="" style="position: absolute; left: -150px; bottom: -150px; z-index: 0; width: 420px; height: 420px; opacity: 0.5; pointer-events: none;" class="hide-mobile">
+    <img src="uploads/Group 15886-101fd2e1.png" alt="" style="position: absolute; left: -150px; bottom: 0; z-index: 0; width: 420px; height: 420px; opacity: 0.5; pointer-events: none;" class="hide-mobile">
 
     <div style="position: relative; z-index: 1; text-align: center; max-width: 620px; margin: 0 auto;">
       <h2 style="font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 46px; letter-spacing: -0.02em; margin: 0 0 20px;">{{ t.contact.heading }}</h2>
@@ -433,14 +508,12 @@
         <a href="https://t.me/ambr0se_spellman" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.telegram }}</a>
         <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.whatsapp }}</a>
         <a href="mailto:kaparbekovasaikal@gmail.com" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.email }}</a>
-        <a href="https://saikalkaparbek.com" target="_blank" rel="noopener noreferrer" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.portfolio }}</a>
       </div>
     </div>
   </section>
 
   <footer style="padding: 32px 48px; border-top: 1px solid oklch(0.85 0.006 90); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: oklch(0.46 0.01 90); max-width: 1240px; margin: 0 auto;" class="section-pad">
     <span>{{ t.footer.copyright }}</span>
-    <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" style="font-size: 13px; padding: 8px 16px; border: 1px solid #3B4A30; border-radius: 100px; text-decoration: none; color: #3B4A30; white-space: nowrap;">{{ t.nav.contactBtn }}</a>
     <span>{{ t.footer.location }}</span>
   </footer>
 
@@ -565,7 +638,6 @@ const DATA = {
       telegram: 'Telegram',
       whatsapp: 'Whatsapp',
       email: 'Email',
-      portfolio: 'Portfolio',
     },
     footer: { copyright: '© 2026 Ailana Design Agency', location: 'Bishkek · Remote' },
   },
@@ -686,7 +758,6 @@ const DATA = {
       telegram: 'Telegram',
       whatsapp: 'Whatsapp',
       email: 'Email',
-      portfolio: 'Портфолио',
     },
     footer: { copyright: '© 2026 Ailana Design Agency', location: 'Бишкек · Удалённо' },
   },
@@ -803,7 +874,6 @@ const DATA = {
       telegram: 'Telegram',
       whatsapp: 'Whatsapp',
       email: 'Email',
-      portfolio: 'Портфолио',
     },
     footer: { copyright: '© 2026 Ailana Design Agency', location: 'Бишкек · Алыстан' },
   },
@@ -987,6 +1057,36 @@ class Component extends DCLogic {
     scanAll();
     if (++pollCount > 40) clearInterval(pollId); // ~10s
   }, 250);
+
+  // Mobile menu: delegated on document (not the button/overlay themselves)
+  // so it keeps working across the dc-runtime's re-renders without needing
+  // to re-bind listeners to fresh elements every time.
+  function closeMobileMenu() {
+    var overlay = document.getElementById('mobile-menu-overlay');
+    if (overlay && overlay.classList.contains('open')) {
+      overlay.classList.remove('open');
+      document.documentElement.style.overflow = '';
+    }
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('#mobile-menu-btn')) {
+      var overlay = document.getElementById('mobile-menu-overlay');
+      if (overlay) {
+        overlay.classList.add('open');
+        document.documentElement.style.overflow = 'hidden';
+      }
+      return;
+    }
+    var overlay2 = document.getElementById('mobile-menu-overlay');
+    if (overlay2 && overlay2.classList.contains('open')) {
+      if (e.target === overlay2 || e.target.closest('.mobile-menu-link') || e.target.closest('.mobile-menu-close')) {
+        closeMobileMenu();
+      }
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMobileMenu();
+  });
 })();
 </script>
 </body>
