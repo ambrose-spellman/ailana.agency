@@ -428,6 +428,12 @@
 
   <!-- SERVICES -->
   <section id="services" style="padding: 0;">
+    <div class="section-pad" style="max-width: 1240px; margin: 0 auto; padding: 100px 48px 0;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 56px; flex-wrap: wrap;">
+        <h2 style="font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 40px; letter-spacing: -0.02em; margin: 0;">{{ t.services.heading }}</h2>
+        <p style="font-size: 15px; color: oklch(0.46 0.01 90); max-width: 380px; margin: 0;">{{ t.services.sub }}</p>
+      </div>
+    </div>
     <div class="services-stack-wrapper" id="services-stack-wrapper">
       <div class="services-stack-sticky">
         <sc-for list="{{ t.services.items }}" as="svc" hint-placeholder-count="4">
@@ -570,7 +576,7 @@ const DATA = {
     },
     services: {
       heading: 'Services',
-      sub: 'Four stages, one continuous cycle — each engagement can start wherever your product needs it.',
+      sub: 'Three offerings, one continuous cycle — each engagement can start wherever your product needs it.',
       pointsLabel: 'What you get:',
       howLabel: 'How it works:',
       items: [
@@ -675,7 +681,7 @@ const DATA = {
     },
     services: {
       heading: 'Услуги',
-      sub: 'Четыре этапа одного непрерывного цикла — работа может начаться с любого из них, в зависимости от задачи.',
+      sub: 'Три направления одного непрерывного цикла — работа может начаться с любого из них, в зависимости от задачи.',
       pointsLabel: 'Что вы получите:',
       howLabel: 'Как это устроено:',
       items: [
@@ -780,7 +786,7 @@ const DATA = {
     },
     services: {
       heading: 'Кызматтар',
-      sub: 'Бир циклдин төрт баскычы — иш тапшырмага жараша ар башка баскычтан башталышы мумкун.',
+      sub: 'Бир циклдин үч багыты — иш тапшырмага жараша ар башка багыттан башталышы мумкун.',
       pointsLabel: 'Эмне аласыз:',
       howLabel: 'Кантип иштейт:',
       items: [
