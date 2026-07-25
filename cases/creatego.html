@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CreateGo — No-code веб-конструктор | Ailana Design Studio</title>
+<meta name="description" content="No-code конструктор, который позволяет дизайнерам собирать готовые к продакшену приложения через визуальный интерфейс — без кода.">
+<link rel="canonical" href="https://ailana.design/cases/creatego.html">
+<link rel="icon" type="image/svg+xml" href="../uploads/Logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700;800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+
+<!-- GLightbox (MIT license, free for commercial use) — lightbox for case gallery images -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MJKG1LG1S6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MJKG1LG1S6');
+</script>
+
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: oklch(0.98 0.004 85); color: #3B4A30; font-family: 'IBM Plex Sans', sans-serif; }
+  ::selection { background: #A0C982; color: oklch(0.99 0.003 90); }
+  a { color: inherit; }
+  img { max-width: 100%; height: auto; display: block; }
+
+  .section-pad { padding-left: 48px; padding-right: 48px; }
+  @media (max-width: 640px) {
+    .section-pad { padding-left: 20px !important; padding-right: 20px !important; }
+    .case-hero h1 { font-size: 32px !important; }
+    .case-tags { display: none !important; }
+    nav { flex-wrap: wrap; gap: 10px; padding-top: 16px; padding-bottom: 16px; }
+    .logo-link .logo-text { display: none; }
+    .nav-right { gap: 8px; }
+    .case-gallery { display: flex; flex-direction: row; overflow-x: auto; gap: 16px; -webkit-overflow-scrolling: touch; }
+    .case-gallery figure { flex-shrink: 0; }
+    .case-gallery img { max-width: none; width: 600px; }
+  }
+
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: oklch(0.98 0.004 85 / 0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid oklch(0.85 0.006 90);
+  }
+  .logo-link {
+    font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 19px;
+    letter-spacing: -0.01em; text-decoration: none;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .lang-switch {
+    display: flex; align-items: center; border: 1px solid oklch(0.8 0.008 90);
+    border-radius: 100px; padding: 3px; gap: 2px;
+  }
+  .lang-switch button {
+    font-size: 12.5px; padding: 6px 11px; border-radius: 100px; border: none;
+    cursor: pointer; background: transparent; color: oklch(0.4 0.008 90);
+    font-family: inherit; font-weight: 500;
+  }
+  .lang-switch button.active { background: #3B4A30; color: oklch(0.98 0.004 85); }
+  .nav-contact-btn {
+    font-size: 14px; padding: 9px 18px; border: 1px solid #3B4A30; border-radius: 100px;
+    text-decoration: none; white-space: nowrap;
+  }
+
+  main { max-width: 1240px; margin: 0 auto; padding: 80px 48px 120px; }
+  .case-hero { margin-bottom: 64px; }
+  .case-hero .eyebrow {
+    display: flex; align-items: center; gap: 10px; font-size: 13px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.46 0.01 90);
+    margin-bottom: 20px;
+  }
+  .case-hero .eyebrow span:first-child { width: 8px; height: 8px; border-radius: 50%; background: #A0C982; display: block; flex-shrink: 0; }
+  .case-hero .eyebrow span:last-child { white-space: nowrap; }
+  .case-hero h1 {
+    font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 46px;
+    letter-spacing: -0.02em; margin: 0 0 16px;
+  }
+  .case-hero .intro { font-size: 18px; line-height: 1.6; color: oklch(0.4 0.008 90); max-width: 640px; margin: 0 0 24px; }
+  .case-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .case-tags span {
+    font-size: 12.5px; padding: 5px 12px; border: 1px solid oklch(0.8 0.008 90);
+    border-radius: 100px; color: oklch(0.4 0.008 90);
+  }
+
+  .case-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 64px; }
+  .case-gallery img { border-radius: 8px; border: 1px solid oklch(0.85 0.006 90); width: 100%; display: block; }
+  .case-gallery figure { margin: 0; }
+  .case-gallery figcaption { font-size: 13px; color: oklch(0.46 0.01 90); margin-top: 10px; }
+
+  .case-img-link { position: relative; display: block; cursor: zoom-in; border-radius: 8px; overflow: hidden; }
+  .case-img-link::before {
+    content: ''; position: absolute; inset: 0; background: rgba(20, 26, 15, 0.35);
+    opacity: 0; transition: opacity 0.25s ease; border-radius: 8px;
+  }
+  .case-img-link:hover::before { opacity: 1; }
+  .case-img-link .zoom-icon {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.85);
+    opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none;
+    width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center;
+  }
+  .case-img-link:hover .zoom-icon { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: 13.5px; color: oklch(0.46 0.01 90); margin-bottom: 40px;
+  }
+  .breadcrumbs a { color: oklch(0.46 0.01 90); text-decoration: none; }
+  .breadcrumbs a:hover { color: #3B4A30; text-decoration: underline; }
+  .breadcrumbs .sep { color: oklch(0.75 0.01 90); }
+  .breadcrumbs .current { color: #3B4A30; }
+
+  .case-block { padding: 32px 0; border-top: 1px solid oklch(0.85 0.006 90); }
+  .case-block h2 {
+    font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 22px;
+    letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .case-block p { font-size: 16px; line-height: 1.65; color: oklch(0.4 0.008 90); margin: 0; max-width: 680px; }
+  .case-block ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; max-width: 680px; }
+  .case-block li {
+    font-size: 15.5px; line-height: 1.55; color: oklch(0.4 0.008 90);
+    padding-left: 20px; position: relative;
+  }
+  .case-block li::before {
+    content: ''; position: absolute; left: 0; top: 8px;
+    width: 6px; height: 6px; border-radius: 50%; background: #A0C982;
+  }
+
+  .case-cta {
+    margin-top: 64px; padding: 48px; border-radius: 16px; background: #3B4A30;
+    color: oklch(0.98 0.004 85); text-align: center;
+  }
+  .case-cta h2 { font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 28px; margin: 0 0 12px; }
+  .case-cta p { font-size: 15px; opacity: 0.85; margin: 0 0 28px; }
+  .case-cta a {
+    display: inline-block; font-size: 15px; padding: 14px 28px; background: oklch(0.98 0.004 85);
+    color: #3B4A30; border-radius: 100px; text-decoration: none; font-weight: 500;
+  }
+
+  footer {
+    padding: 32px 48px; border-top: 1px solid oklch(0.85 0.006 90);
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-size: 13px; color: oklch(0.46 0.01 90); max-width: 1240px; margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110515935', 'ym');
+
+    ym(110515935, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/110515935" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<nav class="section-pad">
+  <a href="../index.html" class="logo-link">
+    <img src="../uploads/Logo.svg" alt="Ailana logo" width="22" height="22">
+    <span class="logo-text">Ailana Design Studio</span>
+  </a>
+  <div class="nav-right">
+    <div class="lang-switch">
+      <button data-lang="en">EN</button>
+      <button data-lang="ru" class="active">RU</button>
+      <button data-lang="ky">KY</button>
+    </div>
+    <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" class="nav-contact-btn" data-i18n="contact">Связаться</a>
+  </div>
+</nav>
+
+<main>
+  <div class="breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    <a href="../index.html" data-i18n="crumbHome">Главная</a>
+    <span class="sep">/</span>
+    <span class="current">CreateGo</span>
+  </div>
+
+  <div class="case-hero">
+    <div class="eyebrow"><span></span><span data-i18n="tagline">Web App · No-code · Design Tools</span></div>
+    <h1 data-i18n="title">No-code веб-конструктор</h1>
+    <p class="intro" data-i18n="intro">No-code конструктор, который позволяет дизайнерам собирать готовые к продакшену приложения через визуальный интерфейс — без кода.</p>
+    <div class="case-tags" data-i18n-list="tags"></div>
+  </div>
+
+  <div class="case-gallery">
+    <figure>
+      <a class="glightbox case-img-link" href="../uploads/cases/creatego/dashboard.png" data-gallery="creatego">
+        <img src="../uploads/cases/creatego/dashboard.png" alt="CreateGo — project dashboard" width="1084" height="761">
+        <span class="zoom-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></span>
+      </a>
+      <figcaption data-i18n="galleryCaption1"></figcaption>
+    </figure>
+    <figure>
+      <a class="glightbox case-img-link" href="../uploads/cases/creatego/builder-canvas.png" data-gallery="creatego">
+        <img src="../uploads/cases/creatego/builder-canvas.png" alt="CreateGo — visual builder canvas" width="1084" height="813">
+        <span class="zoom-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></span>
+      </a>
+      <figcaption data-i18n="galleryCaption2"></figcaption>
+    </figure>
+    <figure>
+      <a class="glightbox case-img-link" href="../uploads/cases/creatego/ui-kit.png" data-gallery="creatego">
+        <img src="../uploads/cases/creatego/ui-kit.png" alt="CreateGo — UI kit on the Xela design system" width="1290" height="848">
+        <span class="zoom-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></span>
+      </a>
+      <figcaption data-i18n="galleryCaption3"></figcaption>
+    </figure>
+    <figure>
+      <a class="glightbox case-img-link" href="../uploads/cases/creatego/font-modal.png" data-gallery="creatego">
+        <img src="../uploads/cases/creatego/font-modal.png" alt="CreateGo — font upload modal" width="1084" height="813">
+        <span class="zoom-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></span>
+      </a>
+      <figcaption data-i18n="galleryCaption4"></figcaption>
+    </figure>
+    <figure>
+      <a class="glightbox case-img-link" href="../uploads/cases/creatego/login.png" data-gallery="creatego">
+        <img src="../uploads/cases/creatego/login.png" alt="CreateGo — login screen" width="1084" height="760">
+        <span class="zoom-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></span>
+      </a>
+      <figcaption data-i18n="galleryCaption5"></figcaption>
+    </figure>
+  </div>
+
+  <div class="case-block">
+    <h2 data-i18n="problemLabel">Задача</h2>
+    <p data-i18n="problem"></p>
+  </div>
+  <div class="case-block">
+    <h2 data-i18n="roleLabel">Роль</h2>
+    <p data-i18n="role"></p>
+  </div>
+  <div class="case-block">
+    <h2 data-i18n="processLabel">Процесс</h2>
+    <ul data-i18n-list="process"></ul>
+  </div>
+  <div class="case-block">
+    <h2 data-i18n="outcomeLabel">Результат</h2>
+    <ul data-i18n-list="outcome"></ul>
+  </div>
+
+  <div class="case-cta">
+    <h2 data-i18n="ctaHeading">Обсудим ваш проект?</h2>
+    <p data-i18n="ctaSub">Расскажите о задаче — предложим, с чего начать.</p>
+    <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" data-i18n="ctaBtn">Написать в WhatsApp</a>
+  </div>
+</main>
+
+<footer class="section-pad">
+  <span data-i18n="copyright">© 2026 Ailana Design Studio</span>
+  <span data-i18n="location">Bishkek · Remote</span>
+</footer>
+
+<script>
+const DATA = {
+  en: {
+    crumbHome: 'Home',
+    contact: 'Contact',
+    tagline: 'Web App · No-code · Design Tools',
+    title: 'No-code Web Builder',
+    intro: 'A no-code builder that lets designers assemble production-ready apps through a visual interface — no code required.',
+    tags: ['Discovery', 'UX/UI', 'Design Systems'],
+    galleryCaption1: 'Project dashboard: themes, component libraries, files',
+    galleryCaption2: 'The visual builder canvas and container properties panel',
+    galleryCaption3: 'UI kit built on the Xela design system',
+    galleryCaption4: 'Uploading fonts for text blocks',
+    galleryCaption5: 'Login screen for the builder',
+    problemLabel: 'Problem',
+    problem: "Designers had to hand off every prototype to developers and wait for implementation — slowing down the whole product cycle. The goal was to let designers build working apps themselves, without writing code. The hard part: giving every UI element its own set of configurable properties and behaviors, without overwhelming the person using it.",
+    roleLabel: 'Role',
+    role: 'UX/UI Designer — interface architecture and prototyping. Startup team: designer, developers, stakeholders. 6 months, concept to MVP.',
+    processLabel: 'Process',
+    process: [
+      'Acted as a bridge between design and development thanks to a front-end background — translating technical constraints into design decisions, and design decisions into developer-ready specs',
+      'Designed a visual drag-and-drop builder where every element (buttons, containers, inputs) has its own configurable properties panel, similar to FlutterFlow',
+      'Built the UI on the Xela design system — a high-contrast white-and-blue palette designed for clarity and speed',
+      'Went through multiple prototyping rounds to land on the right interaction model for designers with no dev experience',
+    ],
+    outcomeLabel: 'Outcome',
+    outcome: [
+      'A working visual builder — designers assemble real apps without writing code',
+      'A configurable-properties model that scales to new element types',
+      'Faster handoff — fewer round-trips between design and development',
+    ],
+    ctaHeading: "Let's discuss your project?",
+    ctaSub: "Tell us about the task — we'll suggest where to start.",
+    ctaBtn: 'Message on WhatsApp',
+    copyright: '© 2026 Ailana Design Studio',
+    location: 'Bishkek · Remote',
+  },
+  ru: {
+    crumbHome: 'Главная',
+    contact: 'Связаться',
+    tagline: 'Веб-приложение · No-code · Инструменты для дизайнеров',
+    title: 'No-code веб-конструктор',
+    intro: 'No-code конструктор, который позволяет дизайнерам собирать готовые к продакшену приложения через визуальный интерфейс — без кода.',
+    tags: ['Discovery', 'UX/UI', 'Дизайн-системы'],
+    galleryCaption1: 'Панель проектов: темы, библиотеки компонентов, файлы',
+    galleryCaption2: 'Холст визуального конструктора и панель свойств контейнера',
+    galleryCaption3: 'UI-кит на дизайн-системе Xela',
+    galleryCaption4: 'Загрузка шрифтов для текстовых блоков',
+    galleryCaption5: 'Экран входа в конструктор',
+    problemLabel: 'Задача',
+    problem: 'Дизайнерам приходилось передавать каждый прототип разработчикам и ждать реализации — это замедляло весь продуктовый цикл. Цель — дать дизайнерам возможность собирать рабочие приложения самостоятельно, без кода. Сложность — дать каждому UI-элементу свой набор настраиваемых свойств и поведений, не перегружая пользователя.',
+    roleLabel: 'Роль',
+    role: 'UX/UI дизайнер — архитектура интерфейса и прототипирование. Команда стартапа: дизайнер, разработчики, стейкхолдеры. 6 месяцев, от концепции до MVP.',
+    processLabel: 'Процесс',
+    process: [
+      'Выступала мостом между дизайном и разработкой благодаря фронтенд-бэкграунду — переводила технические ограничения в дизайн-решения и обратно, в понятные разработчикам спецификации',
+      'Спроектировала визуальный drag-and-drop конструктор, где каждый элемент (кнопки, контейнеры, поля) имеет собственную панель настраиваемых свойств — по аналогии с FlutterFlow',
+      'Собрала UI на дизайн-системе Xela — контрастная палитра белого и синего для ясности и скорости',
+      'Прошла через множество раундов прототипирования, чтобы найти верную модель взаимодействия для дизайнеров без опыта разработки',
+    ],
+    outcomeLabel: 'Результат',
+    outcome: [
+      'Рабочий визуальный конструктор — дизайнеры собирают реальные приложения без кода',
+      'Модель настраиваемых свойств, которая масштабируется на новые типы элементов',
+      'Более быстрая передача в разработку — меньше циклов согласования между дизайном и разработкой',
+    ],
+    ctaHeading: 'Обсудим ваш проект?',
+    ctaSub: 'Расскажите о задаче — предложим, с чего начать.',
+    ctaBtn: 'Написать в WhatsApp',
+    copyright: '© 2026 Ailana Design Studio',
+    location: 'Бишкек · Удалённо',
+  },
+  ky: {
+    crumbHome: 'Башкы бет',
+    contact: 'Кайрылуу',
+    tagline: 'Веб-тиркеме · No-code · Дизайнерлер үчүн куралдар',
+    title: 'No-code веб-конструктор',
+    intro: 'Дизайнерлерге визуалдык интерфейс аркылуу, коддоосуз, даяр колдонууга ылайыктуу тиркемелерди чогултууга мүмкүндүк берген no-code конструктор.',
+    tags: ['Discovery', 'UX/UI', 'Дизайн-системалар'],
+    galleryCaption1: 'Долбоорлор панели: темалар, компоненттер китепканалары, файлдар',
+    galleryCaption2: 'Визуалдык конструктордун холсту жана контейнер касиеттеринин панели',
+    galleryCaption3: 'Xela дизайн-системасынын негизиндеги UI-кит',
+    galleryCaption4: 'Текст блоктору үчүн шрифттерди жүктөө',
+    galleryCaption5: 'Конструкторго кирүү экраны',
+    problemLabel: 'Милдет',
+    problem: 'Дизайнерлер ар бир прототипти разработчиктерге өткөрүп берип, ишке ашырылышын күтүшчү — бул бүтүндөй продукттук циклди жайлатчу. Максат — дизайнерлерге коддоосуз эле иштеген тиркемелерди өздөрү чогултууга мүмкүнчүлүк берүү. Татаалдыгы — ар бир UI-элементке колдонуучуну чарчатпай, өзүнүн ыңгайлаштырылуучу касиеттеринин жана жүрүм-турумдарынын топтомун берүү.',
+    roleLabel: 'Роль',
+    role: 'UX/UI дизайнер — интерфейс архитектурасы жана прототиптөө. Стартап командасы: дизайнер, разработчиктер, стейкхолдерлер. 6 ай, концепциядан MVP-ге чейин.',
+    processLabel: 'Процесс',
+    process: [
+      'Фронтенд-бэкграундунун аркасында дизайн менен разработка ортосунда көпүрө болдум — техникалык чектөөлөрдү дизайн-чечимдерге жана тескерисинче которуп турдум',
+      'Ар бир элемент (баскычтар, контейнерлер, талаалар) өзүнүн ыңгайлаштырылуучу касиеттер панели бар визуалдык drag-and-drop конструкторун долбоорлодум — FlutterFlow сыяктуу',
+      'UI’ды Xela дизайн-системасынын негизинде чогулттум — тактык жана ылдамдык үчүн ак жана көк түстөрдүн контрасттуу палитрасы',
+      'Разработка тажрыйбасы жок дизайнерлер үчүн туура өз ара аракеттешүү моделин табуу үчүн көптөгөн прототиптөө раундарынан өттүм',
+    ],
+    outcomeLabel: 'Натыйжа',
+    outcome: [
+      'Иштеген визуалдык конструктор — дизайнерлер коддоосуз эле чыныгы тиркемелерди чогултушат',
+      'Жаңы элемент түрлөрүнө масштабдалуучу ыңгайлаштырылуучу касиеттер модели',
+      'Разработкага тезирээк өткөрүп берүү — дизайн менен разработканын ортосунда аз циклдер',
+    ],
+    ctaHeading: 'Долбооруңузду талкуулайлыбы?',
+    ctaSub: 'Милдет жөнүндө айтып бериңиз — кайдан баштоо керектигин сунуштайбыз.',
+    ctaBtn: 'WhatsApp\'ка жазуу',
+    copyright: '© 2026 Ailana Design Studio',
+    location: 'Бишкек · Алыстан',
+  },
+};
+
+function detectDefaultLang() {
+  try {
+    var saved = localStorage.getItem('ailana-lang');
+    if (saved && DATA[saved]) return saved;
+  } catch (e) {}
+  const codes = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'ru']);
+  for (const code of codes) {
+    const base = code.toLowerCase().split('-')[0];
+    if (base === 'ky' || base === 'kir') return 'ky';
+    if (base === 'ru') return 'ru';
+    if (base === 'en') return 'en';
+  }
+  return 'ru';
+}
+
+function applyLang(lang) {
+  const t = DATA[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  document.querySelectorAll('[data-i18n-list]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-list');
+    const items = t[key];
+    if (!items) return;
+    if (el.tagName === 'UL') {
+      el.innerHTML = items.map((s) => `<li>${s}</li>`).join('');
+    } else {
+      el.innerHTML = items.map((s) => `<span>${s}</span>`).join('');
+    }
+  });
+  document.querySelectorAll('.lang-switch button').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+}
+
+document.querySelectorAll('.lang-switch button').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    try { localStorage.setItem('ailana-lang', btn.dataset.lang); } catch (e) {}
+    applyLang(btn.dataset.lang);
+  });
+});
+
+applyLang(detectDefaultLang());
+
+if (window.GLightbox) {
+  GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true, zoomable: true });
+}
+</script>
+
+</body>
+</html>
