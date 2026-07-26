@@ -178,9 +178,6 @@
       .section-pad { padding-left: 20px !important; padding-right: 20px !important; }
       .ring-wrap { width: 100% !important; height: auto !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 16px !important; aspect-ratio: unset !important; }
       .ring-item { position: static !important; width: 260px !important; height: 260px !important; padding: 15% !important; }
-      .service-row button { padding: 20px !important; gap: 14px !important; }
-      .service-detail { padding-left: 20px !important; padding-right: 20px !important; }
-      .grid-service-points { grid-template-columns: 1fr !important; }
     }
     @media (max-width: 520px) {
       nav.section-pad { padding-left: 16px !important; padding-right: 16px !important; gap: 10px !important; }
@@ -242,20 +239,6 @@
       transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
     }
     .reveal.in-view { opacity: 1; transform: translateY(0); }
-    .services-list > .reveal:nth-child(1) { transition-delay: 0.05s; }
-    .services-list > .reveal:nth-child(2) { transition-delay: 0.15s; }
-    .services-list > .reveal:nth-child(3) { transition-delay: 0.25s; }
-    .services-list > .reveal:nth-child(4) { transition-delay: 0.35s; }
-
-    /* Services accordion: hover affordance + detail panel entrance */
-    .service-row button:hover { background: oklch(0.96 0.005 90); }
-    .service-detail {
-      animation: serviceDetailIn 0.4s cubic-bezier(0.16,1,0.3,1);
-    }
-    @keyframes serviceDetailIn {
-      from { opacity: 0; transform: translateY(-8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
 
     /* Services stack: prototype for a scroll-scrubbed "cards overlaying
        cards" section. #services-stack-wrapper is tall (N * 100vh) purely
@@ -320,7 +303,7 @@
       display: flex;
       gap: 32px;
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: x proximity;
       scroll-behavior: smooth;
       padding-bottom: 8px;
       -webkit-overflow-scrolling: touch;
@@ -336,6 +319,7 @@
       cursor: pointer; z-index: 5; padding: 0;
     }
     .cases-nav:hover { background: oklch(0.96 0.005 90); }
+    .cases-nav:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
     .cases-nav-prev { left: -22px; }
     .cases-nav-next { right: -22px; }
 
@@ -363,9 +347,15 @@
       color: oklch(0.85 0.02 100) !important;
       border-color: oklch(0.45 0.02 100) !important;
     }
+    /* #A0C982 on the light cream background is ~1.8:1 contrast — far below
+       the 4.5:1 minimum for body text. This darker green clears ~6:1 while
+       still reading as the brand accent; the light variant stays for when
+       the section has scrolled into its dark background. */
+    #cases .case-outcome { color: #3F6B2A; transition: color 0.35s ease; }
+    #cases.cases-dark .case-outcome { color: #A0C982; }
 
     @media (prefers-reduced-motion: reduce) {
-      .reveal, .ring-item, .golden-ratio-svg circle, .service-detail { opacity: 1 !important; transform: none !important; transition: none !important; animation: none !important; }
+      .reveal, .ring-item, .golden-ratio-svg circle { opacity: 1 !important; transform: none !important; transition: none !important; animation: none !important; }
     }
   </style>
 </helmet>
@@ -388,11 +378,11 @@
     <div style="display: flex; align-items: center; gap: 14px; flex-shrink: 0;">
       <div style="display: flex; align-items: center; border: 1px solid oklch(0.8 0.008 90); border-radius: 100px; padding: 3px; gap: 2px;">
         <sc-for list="{{ langs }}" as="l" hint-placeholder-count="3">
-          <button onClick="{{ l.select }}" style="font-size: 12.5px; padding: 6px 11px; border-radius: 100px; border: none; cursor: pointer; background: {{ l.bg }}; color: {{ l.color }}; font-family: inherit; font-weight: 500;">{{ l.label }}</button>
+          <button onClick="{{ l.select }}" aria-pressed="{{ l.pressed }}" style="font-size: 12.5px; padding: 9px 13px; border-radius: 100px; border: none; cursor: pointer; background: {{ l.bg }}; color: {{ l.color }}; font-family: inherit; font-weight: 500;">{{ l.label }}</button>
         </sc-for>
       </div>
       <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" class="nav-contact-btn" style="font-size: 14px; padding: 9px 18px; border: 1px solid #3B4A30; border-radius: 100px; text-decoration: none; color: #3B4A30; white-space: nowrap;">{{ t.nav.contactBtn }}</a>
-      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu" style="background: none; border: none; cursor: pointer; padding: 4px; flex-shrink: 0; align-items: center; justify-content: center;">
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu-overlay" style="background: none; border: none; cursor: pointer; padding: 4px; flex-shrink: 0; align-items: center; justify-content: center;">
         <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M5.625 27C5.625 26.7016 5.74353 26.4155 5.95451 26.2045C6.16548 25.9935 6.45163 25.875 6.75 25.875H29.25C29.5484 25.875 29.8345 25.9935 30.0455 26.2045C30.2565 26.4155 30.375 26.7016 30.375 27C30.375 27.2984 30.2565 27.5845 30.0455 27.7955C29.8345 28.0065 29.5484 28.125 29.25 28.125H6.75C6.45163 28.125 6.16548 28.0065 5.95451 27.7955C5.74353 27.5845 5.625 27.2984 5.625 27ZM5.625 18C5.625 17.7016 5.74353 17.4155 5.95451 17.2045C6.16548 16.9935 6.45163 16.875 6.75 16.875H29.25C29.5484 16.875 29.8345 16.9935 30.0455 17.2045C30.2565 17.4155 30.375 17.7016 30.375 18C30.375 18.2984 30.2565 18.5845 30.0455 18.7955C29.8345 19.0065 29.5484 19.125 29.25 19.125H6.75C6.45163 19.125 6.16548 19.0065 5.95451 18.7955C5.74353 18.5845 5.625 18.2984 5.625 18ZM5.625 9C5.625 8.70163 5.74353 8.41548 5.95451 8.20451C6.16548 7.99353 6.45163 7.875 6.75 7.875H29.25C29.5484 7.875 29.8345 7.99353 30.0455 8.20451C30.2565 8.41548 30.375 8.70163 30.375 9C30.375 9.29837 30.2565 9.58452 30.0455 9.79549C29.8345 10.0065 29.5484 10.125 29.25 10.125H6.75C6.45163 10.125 6.16548 10.0065 5.95451 9.79549C5.74353 9.58452 5.625 9.29837 5.625 9V9Z" fill="#3B4A30"/>
         </svg>
@@ -433,14 +423,14 @@
   <div style="position: relative; z-index: 1;">
       
 
-      <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.46 0.01 90); margin-bottom: 30px; width: 1087px; height: 19px; position: relative">
+      <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.46 0.01 90); margin-bottom: 30px;">
         <span style="width: 16px; height: 16px; border-radius: 50%; background: #A0C982; display: block"></span>
         {{ t.hero.label }}
       </div><h1 class="hero-h1" style="font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 76px; line-height: 1.05; letter-spacing: -0.025em; margin: 0 0 28px; max-width: 880px;">{{ t.hero.h1 }}</h1>
 
       
 
-      <p style="font-size: 19px; line-height: 1.55; color: oklch(0.4 0.008 90); max-width: 600px; margin: 0 0 44px; height: 85px; width: 600px">{{ t.hero.sub }}</p><div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <p style="font-size: 19px; line-height: 1.55; color: oklch(0.4 0.008 90); max-width: 600px; margin: 0 0 44px;">{{ t.hero.sub }}</p><div style="display: flex; gap: 16px; flex-wrap: wrap;">
         <a href="#cases" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.hero.cta1 }}</a>
         <a href="#contact" style="font-size: 15px; padding: 15px 28px; border: 1px solid #3B4A30; color: #3B4A30; border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.hero.cta2 }}</a>
       </div>
@@ -475,6 +465,9 @@
                     <span class="tag-grid-item">{{ tag }}</span>
                   </sc-for>
                 </div>
+                <sc-if value="{{ svc.detail }}">
+                  <a href="#contact" style="display: inline-block; margin-top: 28px; font-size: 14.5px; padding: 13px 24px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ svc.detail.cta }}</a>
+                </sc-if>
               </div>
               <img class="services-stack-graphic hide-mobile" src="{{ svc.iconSrc }}" alt="" width="300" height="300">
             </div>
@@ -512,10 +505,10 @@
                 <span class="case-type" style="font-size: 12px; color: oklch(0.46 0.01 90);">{{ c.type }}</span>
               </div>
               <p class="case-desc" style="font-size: 14.5px; line-height: 1.5; color: oklch(0.4 0.008 90); margin: 0;">{{ c.desc }}</p>
-              <p style="font-size: 13.5px; color: #A0C982; margin: 0; font-weight: 500;">{{ c.outcome }}</p>
+              <p class="case-outcome" style="font-size: 13.5px; margin: 0; font-weight: 500;">{{ c.outcome }}</p>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
                 <sc-for list="{{ c.tags }}" as="tag" hint-placeholder-count="3">
-                  <span class="case-tag" style="font-size: 11.5px; padding: 4px 10px; border: 1px solid oklch(0.8 0.008 90); border-radius: 100px; color: oklch(0.4 0.008 90);">{{ tag }}</span>
+                  <span class="case-tag" style="font-size: 11.5px; padding: 4px 10px; border: 1px solid oklch(0.8 0.008 90); border-radius: 100px; color: oklch(0.4 0.008 90); white-space: nowrap;">{{ tag }}</span>
                 </sc-for>
               </div>
             </div>
@@ -539,9 +532,9 @@
       <div class="ring-wrap" style="position: relative; width: 100%; max-width: 1280px; aspect-ratio: 950 / 300; margin: 0 auto;">
         <sc-for list="{{ t.process.steps }}" as="step" hint-placeholder-count="5">
           <div class="ring-item" style="position: absolute; left: {{ step.xPct }}%; top: {{ step.yPct }}%; width: 20%; height: 63.33%; border-radius: 50%; border: 1.5px solid {{ step.border }}; background: {{ step.fill }}; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; padding: 7%;">
-            <span style="font-family: 'Tektur', sans-serif; font-size: 10px; color: #A0C982; font-weight: 600;">{{ step.num }}</span>
-            <h4 style="font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 13px; margin: 0; line-height: 1.15;">{{ step.title }}</h4>
-            <p style="font-size: 10.5px; color: oklch(0.46 0.01 90); margin: 0; line-height: 1.25;">{{ step.caption }}</p>
+            <span style="font-family: 'Tektur', sans-serif; font-size: 11px; color: #3F6B2A; font-weight: 600;">{{ step.num }}</span>
+            <h3 style="font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 14px; margin: 0; line-height: 1.15;">{{ step.title }}</h3>
+            <p style="font-size: 11px; color: oklch(0.4 0.008 90); margin: 0; line-height: 1.25;">{{ step.caption }}</p>
           </div>
         </sc-for>
       </div>
@@ -563,7 +556,7 @@
         <div style="display: flex; flex-direction: column; gap: 0;">
           <sc-for list="{{ t.about.points }}" as="pt" hint-placeholder-count="4">
             <div style="display: flex; gap: 18px; padding: 22px 0; border-top: 1px solid oklch(0.85 0.006 90);">
-              <span style="font-family: 'Tektur', sans-serif; font-size: 13px; color: #A0C982; font-weight: 600; flex-shrink: 0; padding-top: 2px;">{{ pt.index }}</span>
+              <span style="font-family: 'Tektur', sans-serif; font-size: 13px; color: #3F6B2A; font-weight: 600; flex-shrink: 0; padding-top: 2px;">{{ pt.index }}</span>
               <p style="font-size: 15px; line-height: 1.55; margin: 0; color: #3B4A30;">{{ pt.text }}</p>
             </div>
           </sc-for>
@@ -581,9 +574,12 @@
       <h2 style="font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 46px; letter-spacing: -0.02em; margin: 0 0 20px;">{{ t.contact.heading }}</h2>
       <p style="font-size: 16.5px; line-height: 1.6; color: oklch(0.4 0.008 90); margin: 0 0 40px;">{{ t.contact.sub }}</p>
       <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <a href="https://t.me/ambr0se_spellman" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.telegram }}</a>
+        <a href="https://t.me/ambr0se_spellman" target="_blank" rel="noopener noreferrer" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.telegram }}</a>
         <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.whatsapp }}</a>
-        <a href="mailto:kaparbekovasaikal@gmail.com" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500;">{{ t.contact.email }}</a>
+        <a href="mailto:kaparbekovasaikal@gmail.com" id="email-copy-btn" data-email="kaparbekovasaikal@gmail.com" data-copied-label="{{ t.contact.emailCopied }}" style="font-size: 15px; padding: 15px 28px; background: #3B4A30; color: oklch(0.98 0.004 85); border-radius: 100px; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span data-email-label>{{ t.contact.email }}</span>
+        </a>
       </div>
     </div>
   </section>
@@ -599,6 +595,10 @@
 <script type="text/x-dc" data-dc-script>
 const DATA = {
   en: {
+    meta: {
+      title: 'Ailana Design Studio — Full-Cycle Product Design Studio',
+      description: 'Ailana is a full-cycle design studio based in Bishkek — discovery, research, UX/UI design and design systems for digital products, from brief to delivery.',
+    },
     nav: { services: 'Services', cases: 'Cases', process: 'Process', about: 'About', contact: 'Contact', contactBtn: 'Contact' },
     hero: {
       label: 'Remote · Bishkek',
@@ -614,7 +614,7 @@ const DATA = {
       howLabel: 'How it works:',
       items: [
         {
-          title: 'Discovery & Product Strategy', icon: 'triangle.svg', desc: 'We work with the client to clarify the brief, context and expectations, framing the problem and the goal. From there we define hypotheses and key questions that set the direction for research.', tags: ['Brief', 'Hypotheses', 'Target Audience', 'Benchmarking', 'Product Strategy', 'Scoping'], dash: '23 69',
+          title: 'Discovery & Product Strategy', icon: 'triangle.svg', desc: 'We work with the client to clarify the brief, context and expectations, framing the problem and the goal. From there we define hypotheses and key questions that set the direction for research.', tags: ['Brief', 'Hypotheses', 'Target Audience', 'Benchmarking', 'Product Strategy', 'Scoping'],
           detail: {
             heading: 'Discovery & Product Strategy',
             sub: 'Working sessions with your team — clarifying the task before it collects extra features and rework.',
@@ -629,7 +629,7 @@ const DATA = {
           },
         },
         {
-          title: 'UX Research', icon: 'ellipse-1.svg', desc: 'We study users and context through interviews, observation, analytics and other methods. For each project we choose the stages and methods that fit, so the process stays flexible.', tags: ['CJM', 'JTBD', 'User Interviews', 'Usability Testing', 'User Feedback', 'Personas'], dash: '46 69',
+          title: 'UX Research', icon: 'ellipse-1.svg', desc: 'We study users and context through interviews, observation, analytics and other methods. For each project we choose the stages and methods that fit, so the process stays flexible.', tags: ['CJM', 'JTBD', 'User Interviews', 'Usability Testing', 'User Feedback', 'Personas'],
           detail: {
             heading: 'UX Research',
             sub: 'One-on-one interviews and usability testing with real users — wherever suits your team: remote or on-site.',
@@ -644,7 +644,7 @@ const DATA = {
           },
         },
         {
-          title: 'UX/UI Design', icon: 'rectangle.svg', desc: 'We turn insights into a coherent product structure — UX flows, scenarios, interface — and package it all into a design system with a component library, so the product scales without losing consistency.', tags: ['UX Flows', 'Prototyping', 'UI Kit', 'Design Systems', 'Wireframes', 'Dev Handoff'], dash: '69 69',
+          title: 'UX/UI Design', icon: 'rectangle.svg', desc: 'We turn insights into a coherent product structure — UX flows, scenarios, interface — and package it all into a design system with a component library, so the product scales without losing consistency.', tags: ['UX Flows', 'Prototyping', 'UI Kit', 'Design Systems', 'Wireframes', 'Dev Handoff'],
           detail: {
             heading: 'UX/UI Design',
             sub: 'From insights and brief to product structure and interface, packaged into a scalable design system.',
@@ -702,11 +702,16 @@ const DATA = {
       telegram: 'Telegram',
       whatsapp: 'Whatsapp',
       email: 'Email',
+      emailCopied: 'Copied!',
     },
     footer: { copyright: '© 2026 Ailana Design Studio', location: 'Bishkek · Remote' },
   },
 
   ru: {
+    meta: {
+      title: 'Ailana Design Studio — дизайн-студия полного цикла',
+      description: 'Ailana — дизайн-студия полного цикла в Бишкеке: дискавери, исследования, UX/UI дизайн и дизайн-системы для цифровых продуктов, от брифа до сдачи.',
+    },
     nav: { services: 'Услуги', cases: 'Кейсы', process: 'Процесс', about: 'О студии', contact: 'Контакты', contactBtn: 'Связаться' },
     hero: {
       label: 'Удалённо · Бишкек',
@@ -722,7 +727,7 @@ const DATA = {
       howLabel: 'Как это устроено:',
       items: [
         {
-          title: 'Дискавери и продуктовая стратегия', icon: 'triangle.svg', desc: 'Вместе с клиентом уточняем бриф, контекст и ожидания, чтобы прояснить проблему и цель. Определяем гипотезы и ключевые вопросы под конкретный проект, задавая направление для дальнейшего исследования.', tags: ['Бриф', 'Гипотезы', 'Целевая аудитория', 'Бенчмаркинг', 'Продуктовая стратегия', 'Скоупинг'], dash: '23 69',
+          title: 'Дискавери и продуктовая стратегия', icon: 'triangle.svg', desc: 'Вместе с клиентом уточняем бриф, контекст и ожидания, чтобы прояснить проблему и цель. Определяем гипотезы и ключевые вопросы под конкретный проект, задавая направление для дальнейшего исследования.', tags: ['Бриф', 'Гипотезы', 'Целевая аудитория', 'Бенчмаркинг', 'Продуктовая стратегия', 'Скоупинг'],
           detail: {
             heading: 'Дискавери и продуктовая стратегия',
             sub: 'Совместные сессии с командой клиента — проясняем задачу до того, как она обрастёт лишними фичами и переделками.',
@@ -737,7 +742,7 @@ const DATA = {
           },
         },
         {
-          title: 'UX-исследования', icon: 'ellipse-1.svg', desc: 'Изучаем пользователей и контекст через интервью, наблюдения, аналитику и другие методы. Для каждого проекта подбираем подходящие этапы и методы исследования, поэтому процесс всегда остаётся гибким.', tags: ['CJM', 'JTBD', 'Интервью с пользователями', 'Юзабилити-тестирование', 'Обратная связь', 'Персоны'], dash: '46 69',
+          title: 'UX-исследования', icon: 'ellipse-1.svg', desc: 'Изучаем пользователей и контекст через интервью, наблюдения, аналитику и другие методы. Для каждого проекта подбираем подходящие этапы и методы исследования, поэтому процесс всегда остаётся гибким.', tags: ['CJM', 'JTBD', 'Интервью с пользователями', 'Юзабилити-тестирование', 'Обратная связь', 'Персоны'],
           detail: {
             heading: 'UX-исследования',
             sub: 'Личные интервью и тестирование с реальными пользователями — там, где удобно вашей команде: удалённо или на площадке.',
@@ -752,7 +757,7 @@ const DATA = {
           },
         },
         {
-          title: 'UX/UI-дизайн', icon: 'rectangle.svg', desc: 'Превращаем инсайты в цельную структуру продукта — UX-флоу, сценарии, интерфейс — и оформляем всё в дизайн-систему с библиотекой компонентов, чтобы продукт масштабировался без потери консистентности.', tags: ['UX-флоу', 'Прототипирование', 'UI-кит', 'Дизайн-системы', 'Вайрфреймы', 'Dev Handoff'], dash: '69 69',
+          title: 'UX/UI-дизайн', icon: 'rectangle.svg', desc: 'Превращаем инсайты в цельную структуру продукта — UX-флоу, сценарии, интерфейс — и оформляем всё в дизайн-систему с библиотекой компонентов, чтобы продукт масштабировался без потери консистентности.', tags: ['UX-флоу', 'Прототипирование', 'UI-кит', 'Дизайн-системы', 'Вайрфреймы', 'Dev Handoff'],
           detail: {
             heading: 'UX/UI-дизайн',
             sub: 'От инсайтов и брифа — к структуре продукта и интерфейсу, оформленному в масштабируемую дизайн-систему.',
@@ -810,11 +815,16 @@ const DATA = {
       telegram: 'Telegram',
       whatsapp: 'Whatsapp',
       email: 'Email',
+      emailCopied: 'Скопировано!',
     },
     footer: { copyright: '© 2026 Ailana Design Studio', location: 'Бишкек · Удалённо' },
   },
 
   ky: {
+    meta: {
+      title: 'Ailana Design Studio — толук циклдүү дизайн студиясы',
+      description: 'Ailana — Бишкектеги толук циклдүү дизайн студиясы: дискавери, изилдөө, UX/UI дизайн жана санарип продуктылар үчүн дизайн-системалар, брифтен тапшырууга чейин.',
+    },
     nav: { services: 'Кызматтар', cases: 'Кейстер', process: 'Процесс', about: 'Студия жөнүндө', contact: 'Байланыш', contactBtn: 'Кайрылуу' },
     hero: {
       label: 'Алыстан · Бишкек',
@@ -825,16 +835,16 @@ const DATA = {
     },
     services: {
       heading: 'Кызматтар',
-      sub: 'Бир циклдин үч багыты — иш тапшырмага жараша ар башка багыттан башталышы мумкун.',
+      sub: 'Бир циклдин үч багыты — иш тапшырмага жараша ар башка багыттан башталышы мүмкүн.',
       pointsLabel: 'Эмне аласыз:',
       howLabel: 'Кантип иштейт:',
       items: [
-        { title: 'Дискавери жана стратегия', icon: 'triangle.svg', desc: 'Көйгөйдү жана максатты тактоо үчүн кардар менен биргеликте бриф, контекст жана күтүүлөрдү тактап чыгабыз. Проектке ылайык гипотезаларды жана негизги суроолорду аныктап, кийинки изилдөөнүн багытын белгилейбиз.', tags: ['Бриф', 'Гипотезалар', 'Максаттуу аудитория', 'Бенчмаркинг', 'Продукттук стратегия', 'Скоупинг'], dash: '23 69',
+        { title: 'Дискавери жана стратегия', icon: 'triangle.svg', desc: 'Көйгөйдү жана максатты тактоо үчүн кардар менен биргеликте бриф, контекст жана күтүүлөрдү тактап чыгабыз. Проектке ылайык гипотезаларды жана негизги суроолорду аныктап, кийинки изилдөөнүн багытын белгилейбиз.', tags: ['Бриф', 'Гипотезалар', 'Максаттуу аудитория', 'Бенчмаркинг', 'Продукттук стратегия', 'Скоупинг'],
           detail: {
             heading: 'Дискавери жана продукттук стратегия',
             sub: 'Кардардын командасы менен биргелешкен сессиялар — милдетти анык кылабыз, ал кошумча функцияларга жана кайра иштетүүлөргө чөгүп кетмейинче.',
             points: [
-              { title: 'Бир бриф, ар кандай чаттардагы үч версия эмес', text: 'Кошумча функциялардын жана кайра иштеп чыгуунун алдын алуу үчүн, кардар менен болгон сессиялардын алкагын (scope) так аныктап алабыз."' },
+              { title: 'Бир бриф, ар кандай чаттардагы үч версия эмес', text: 'Кошумча функциялардын жана кайра иштеп чыгуунун алдын алуу үчүн, кардар менен болгон сессиялардын алкагын (scope) так аныктап алабыз.' },
               { title: '«Көз менен» болжолдоонун ордуна гипотезалар', text: 'Изилдөө этабы: болжолдоолор эмес, так жооптор. Биз эмнени текшеришибиз керек жана бул эмне үчүн маанилүү экенин алдын ала аныктайбыз.' },
               { title: 'Долбоордун чектери башталганда эле белгилүү, ортосунда эмес', text: 'Так максат — ийгиликтүү долбоор. Биз бриф аркылуу бардык суроолорго жооп таап, команданын (PM, Designer, Developer) бирдиктүү максатта иштешин камсыздайбыз.' },
               { title: 'Бизнес менен иштеп чыгуу командасынын ортосундагы жалпы тил', text: 'Бирдиктүү түшүнүк: Бриф продукт-менеджерден разработчикке чейинки бардык мүчөлөрдү бир максатка багыттайт. Натыйжада — күтүлбөгөн суроолорду жана иштерди алдын' },
@@ -843,7 +853,7 @@ const DATA = {
             cta: 'Стратегияны талкуулоо →',
           },
         },
-        { title: 'UX-изилдөөлөр', icon: 'ellipse-1.svg', desc: 'Колдонуучуларды изилдеп, контекстти түшүнүү үчүн интервьюлар, байкоолор, аналитика жана башка ыкмаларды колдонобуз. Ар бир проект үчүн ылайыктуу этаптарды жана изилдөө методдорун тандайбыз, ошондуктан процесс ар дайым ийкемдүү бойдон калат.', tags: ['CJM', 'JTBD', 'Колдонуучулар менен интервью', 'Юзабилити-тестирлөө', 'Тескери байланыш', 'Персоналар'], dash: '46 69',
+        { title: 'UX-изилдөөлөр', icon: 'ellipse-1.svg', desc: 'Колдонуучуларды изилдеп, контекстти түшүнүү үчүн интервьюлар, байкоолор, аналитика жана башка ыкмаларды колдонобуз. Ар бир проект үчүн ылайыктуу этаптарды жана изилдөө методдорун тандайбыз, ошондуктан процесс ар дайым ийкемдүү бойдон калат.', tags: ['CJM', 'JTBD', 'Колдонуучулар менен интервью', 'Юзабилити-тестирлөө', 'Тескери байланыш', 'Персоналар'],
           detail: {
             heading: 'UX-изилдөөлөр',
             sub: 'Чыныгы колдонуучулар менен жеке интервьюлар жана тестирлөө — командаңызга ыңгайлуу форматта: алыстан же жайгашкан жеринде.',
@@ -857,7 +867,7 @@ const DATA = {
             cta: 'Изилдөөнү талкуулоо →',
           },
         },
-        { title: 'UX/UI-дизайн', icon: 'rectangle.svg', desc: 'Инсайттарды продукттун бүтүндүк түзүмүнө — UX-агымдар, сценарийлер, интерфейс — айландырабыз жана баарын компоненттер китепканасы менен дизайн-системага бекитебиз, ошондуктан продукт консистенттүүлүгүн жоготпой масштабдалат.', tags: ['UX-агым', 'Прототиптөө', 'UI-кит', 'Дизайн-системалар', 'Вайрфреймдер', 'Dev Handoff'], dash: '69 69',
+        { title: 'UX/UI-дизайн', icon: 'rectangle.svg', desc: 'Инсайттарды продукттун бүтүндүк түзүмүнө — UX-агымдар, сценарийлер, интерфейс — айландырабыз жана баарын компоненттер китепканасы менен дизайн-системага бекитебиз, ошондуктан продукт консистенттүүлүгүн жоготпой масштабдалат.', tags: ['UX-агым', 'Прототиптөө', 'UI-кит', 'Дизайн-системалар', 'Вайрфреймдер', 'Dev Handoff'],
           detail: {
             heading: 'UX/UI-дизайн',
             sub: 'Инсайттардан жана брифтен — продукттун түзүмүнө жана масштабдалуучу дизайн-системага бекитилген интерфейске чейин.',
@@ -915,6 +925,7 @@ const DATA = {
       telegram: 'Telegram',
       whatsapp: 'Whatsapp',
       email: 'Email',
+      emailCopied: 'Көчүрүлдү!',
     },
     footer: { copyright: '© 2026 Ailana Design Studio', location: 'Бишкек · Алыстан' },
   },
@@ -936,12 +947,24 @@ function detectDefaultLang() {
 }
 
 class Component extends DCLogic {
-  state = { lang: detectDefaultLang(), expandedServices: {} };
+  state = { lang: detectDefaultLang() };
 
   renderVals() {
     const lang = this.state.lang;
     const raw = DATA[lang];
-    const expandedServices = this.state.expandedServices || {};
+
+    // Keep the document's own metadata (tab title, <html lang>, meta
+    // description) in sync with the in-app language switch — otherwise a
+    // screen reader announces the page in the wrong language and the tab
+    // title never reflects what a visitor actually switched to.
+    try {
+      document.documentElement.lang = lang;
+      if (raw.meta) {
+        if (document.title !== raw.meta.title) document.title = raw.meta.title;
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute('content', raw.meta.description);
+      }
+    } catch (e) {}
 
     const servicesLabel = raw.nav.services.toUpperCase();
     const serviceItemsRaw = raw.services.items;
@@ -949,21 +972,10 @@ class Component extends DCLogic {
       ...raw.services,
       items: serviceItemsRaw.map((s, i) => ({
         ...s,
-        index: String(i + 1).padStart(2, '0'),
         progressLabel: `${servicesLabel} · ${String(i + 1).padStart(2, '0')}/${String(serviceItemsRaw.length).padStart(2, '0')}`,
         iconSrc: `uploads/${s.icon}`,
         stepperItems: serviceItemsRaw.map((s2, j) => ({ title: s2.title, stateClass: j === i ? 'st-current' : 'st-other' })),
-        isExpanded: !!expandedServices[i],
-        chevronStyle: `transition: transform 0.3s ease; transform: rotate(${expandedServices[i] ? 180 : 0}deg);`,
-        toggle: () => {
-          const next = { ...(this.state.expandedServices || {}) };
-          next[i] = !next[i];
-          this.setState({ expandedServices: next });
-        },
-        detail: s.detail ? {
-          ...s.detail,
-          points: s.detail.points.map((p, j) => ({ ...p, num: String(j + 1).padStart(2, '0') })),
-        } : undefined,
+        detail: s.detail,
       })),
     };
 
@@ -1008,6 +1020,7 @@ class Component extends DCLogic {
       },
       bg: l.code === lang ? '#3B4A30' : 'transparent',
       color: l.code === lang ? 'oklch(0.98 0.004 85)' : 'oklch(0.4 0.008 90)',
+      pressed: l.code === lang ? 'true' : 'false',
     }));
 
     return { t, langs };
@@ -1119,11 +1132,45 @@ class Component extends DCLogic {
     }, remaining);
   }
 
+  function updateCasesNavButtons() {
+    var slider = document.getElementById('cases-slider');
+    var prevBtn = document.getElementById('cases-prev');
+    var nextBtn = document.getElementById('cases-next');
+    if (!slider || !prevBtn || !nextBtn) return;
+    prevBtn.disabled = slider.scrollLeft <= 1;
+    // With scroll-snap-type: mandatory, the browser settles on card
+    // boundaries — it never actually reaches raw scrollWidth - clientWidth,
+    // so that arithmetic alone under-detects "at the end". Checking whether
+    // the last card's right edge has entered view is snap-agnostic.
+    var slides = slider.querySelectorAll('.cases-slide');
+    var lastSlide = slides[slides.length - 1];
+    if (lastSlide) {
+      var sliderRight = slider.getBoundingClientRect().right;
+      var lastSlideRight = lastSlide.getBoundingClientRect().right;
+      nextBtn.disabled = lastSlideRight <= sliderRight + 1;
+    } else {
+      nextBtn.disabled = slider.scrollLeft >= slider.scrollWidth - slider.clientWidth - 1;
+    }
+    if (!slider.dataset.scrollWired) {
+      slider.dataset.scrollWired = '1';
+      var scrollTicking = false;
+      slider.addEventListener('scroll', function () {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        window.requestAnimationFrame(function () {
+          updateCasesNavButtons();
+          scrollTicking = false;
+        });
+      }, { passive: true });
+    }
+  }
+
   function scanAll() {
     scanRing();
     scanReveal();
     updateCasesProgress();
     updateServicesStack();
+    updateCasesNavButtons();
     hidePreloaderWhenReady();
   }
 
@@ -1158,7 +1205,10 @@ class Component extends DCLogic {
     var overlay = document.getElementById('mobile-menu-overlay');
     if (overlay && overlay.classList.contains('open')) {
       overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
       document.documentElement.style.overflow = '';
+      var btn = document.getElementById('mobile-menu-btn');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
     }
   }
   document.addEventListener('click', function (e) {
@@ -1166,7 +1216,9 @@ class Component extends DCLogic {
       var overlay = document.getElementById('mobile-menu-overlay');
       if (overlay) {
         overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
         document.documentElement.style.overflow = 'hidden';
+        e.target.closest('#mobile-menu-btn').setAttribute('aria-expanded', 'true');
       }
       return;
     }
@@ -1191,6 +1243,30 @@ class Component extends DCLogic {
     var card = slider.querySelector('.cases-slide');
     var amount = card ? card.getBoundingClientRect().width + 32 : 360;
     slider.scrollBy({ left: prevBtn ? -amount : amount, behavior: 'smooth' });
+  });
+
+  // Email button: copy the address to the clipboard instead of relying on
+  // a mailto: handler being configured at all (many desktops don't have
+  // one). Falls back to the native mailto: navigation if the Clipboard
+  // API is unavailable or the write is rejected.
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('#email-copy-btn');
+    if (!btn) return;
+    if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+    e.preventDefault();
+    var email = btn.dataset.email;
+    var label = btn.querySelector('[data-email-label]');
+    navigator.clipboard.writeText(email).then(function () {
+      if (!label) return;
+      var original = label.textContent;
+      label.textContent = btn.dataset.copiedLabel || 'Copied!';
+      clearTimeout(btn._copyResetTimer);
+      btn._copyResetTimer = setTimeout(function () {
+        label.textContent = original;
+      }, 1500);
+    }).catch(function () {
+      window.location.href = 'mailto:' + email;
+    });
   });
 })();
 </script>
