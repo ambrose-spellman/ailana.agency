@@ -73,6 +73,15 @@
   .nav-right { display: flex; align-items: center; gap: 14px; font-size: 13.5px; }
   .nav-right a { text-decoration: none; color: oklch(0.4 0.008 90); }
   .nav-right a:hover { color: #3B4A30; }
+  .lang-switch {
+    display: flex; align-items: center; border: 1px solid oklch(0.8 0.008 90);
+    border-radius: 100px; padding: 3px; gap: 2px;
+  }
+  .lang-switch a {
+    font-size: 12.5px; padding: 6px 11px; border-radius: 100px;
+    color: oklch(0.4 0.008 90); font-weight: 500; text-decoration: none;
+  }
+  .lang-switch a.active { background: #3B4A30; color: oklch(0.98 0.004 85); }
   .nav-contact-btn {
     font-size: 14px; padding: 9px 18px; border: 1px solid #3B4A30; border-radius: 100px;
     text-decoration: none !important; white-space: nowrap; color: #3B4A30 !important;
@@ -161,7 +170,10 @@
   </a>
   <div class="nav-right">
     <a href="/blog/">Блог</a>
-    {% if page.translation_url %}<a href="{{ page.translation_url }}">{{ page.translation_lang | upcase }}</a>{% endif %}
+    <div class="lang-switch">
+      <a href="{% if page.lang == 'ru' %}{{ page.url }}{% elsif page.translation_lang == 'ru' %}{{ page.translation_url }}{% else %}/blog/{% endif %}" class="{% if page.lang == 'ru' %}active{% endif %}">RU</a>
+      <a href="{% if page.lang == 'ky' %}{{ page.url }}{% elsif page.translation_lang == 'ky' %}{{ page.translation_url }}{% else %}/blog/{% endif %}" class="{% if page.lang == 'ky' %}active{% endif %}">KY</a>
+    </div>
     <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" class="nav-contact-btn">{% if page.lang == 'ky' %}Кайрылуу{% else %}Связаться{% endif %}</a>
   </div>
 </nav>
