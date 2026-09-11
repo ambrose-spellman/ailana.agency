@@ -1,0 +1,8 @@
+title: Ailana Design Studio
+url: "https://ailana.design"
+markdown: kramdown
+permalink: /blog/:categories/:title/
+
+exclude:
+  - README.md
+  - "*.code-workspace"

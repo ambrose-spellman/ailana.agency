@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: 'ru' }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page.title }} | Ailana Design Studio</title>
+<meta name="description" content="{{ page.description }}">
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+{% if page.translation_url %}
+<link rel="alternate" hreflang="{{ page.lang }}" href="{{ site.url }}{{ page.url }}">
+<link rel="alternate" hreflang="{{ page.translation_lang }}" href="{{ site.url }}{{ page.translation_url }}">
+{% endif %}
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ page.title }}">
+<meta property="og:description" content="{{ page.description }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<link rel="icon" type="image/svg+xml" href="/uploads/Logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MJKG1LG1S6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MJKG1LG1S6');
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ page.title | jsonify }},
+  "description": {{ page.description | jsonify }},
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "author": { "@type": "Organization", "name": "Ailana Design Studio" },
+  "publisher": { "@type": "Organization", "name": "Ailana Design Studio", "logo": { "@type": "ImageObject", "url": "{{ site.url }}/uploads/Logo.svg" } },
+  "mainEntityOfPage": "{{ site.url }}{{ page.url }}"
+}
+</script>
+
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: oklch(0.98 0.004 85); color: #3B4A30; font-family: 'IBM Plex Sans', sans-serif; }
+  ::selection { background: #A0C982; color: oklch(0.99 0.003 90); }
+  a { color: inherit; }
+  img { max-width: 100%; height: auto; display: block; }
+
+  .section-pad { padding-left: 48px; padding-right: 48px; }
+  @media (max-width: 640px) {
+    .section-pad { padding-left: 20px !important; padding-right: 20px !important; }
+    .post-hero h1 { font-size: 30px !important; }
+    .logo-link .logo-text { display: none; }
+  }
+
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: oklch(0.98 0.004 85 / 0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid oklch(0.85 0.006 90);
+  }
+  .logo-link {
+    font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 19px;
+    letter-spacing: -0.01em; text-decoration: none;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .nav-right { display: flex; align-items: center; gap: 14px; font-size: 13.5px; }
+  .nav-right a { text-decoration: none; color: oklch(0.4 0.008 90); }
+  .nav-right a:hover { color: #3B4A30; }
+  .nav-contact-btn {
+    font-size: 14px; padding: 9px 18px; border: 1px solid #3B4A30; border-radius: 100px;
+    text-decoration: none !important; white-space: nowrap; color: #3B4A30 !important;
+  }
+
+  main { max-width: 760px; margin: 0 auto; padding: 80px 48px 120px; }
+
+  .breadcrumbs {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: 13.5px; color: oklch(0.46 0.01 90); margin-bottom: 40px;
+  }
+  .breadcrumbs a { color: oklch(0.46 0.01 90); text-decoration: none; }
+  .breadcrumbs a:hover { color: #3B4A30; text-decoration: underline; }
+  .breadcrumbs .sep { color: oklch(0.75 0.01 90); }
+  .breadcrumbs .current { color: #3B4A30; }
+
+  .post-hero { margin-bottom: 48px; }
+  .post-hero .eyebrow {
+    display: flex; align-items: center; gap: 10px; font-size: 13px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: oklch(0.46 0.01 90);
+    margin-bottom: 20px;
+  }
+  .post-hero .eyebrow span:first-child { width: 8px; height: 8px; border-radius: 50%; background: #A0C982; display: block; flex-shrink: 0; }
+  .post-hero h1 {
+    font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 40px;
+    letter-spacing: -0.02em; margin: 0 0 16px; line-height: 1.15;
+  }
+  .post-hero .intro { font-size: 18px; line-height: 1.6; color: oklch(0.4 0.008 90); margin: 0; }
+
+  .post-body { font-size: 16.5px; line-height: 1.75; color: oklch(0.35 0.008 90); }
+  .post-body h2 {
+    font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 24px;
+    letter-spacing: -0.01em; margin: 48px 0 16px;
+  }
+  .post-body h3 { font-family: 'Tektur', sans-serif; font-weight: 600; font-size: 19px; margin: 32px 0 12px; }
+  .post-body p { margin: 0 0 20px; }
+  .post-body ul, .post-body ol { margin: 0 0 20px; padding-left: 22px; }
+  .post-body li { margin-bottom: 8px; }
+  .post-body a { color: #3F6B2A; text-decoration: underline; }
+  .post-body strong { color: #3B4A30; }
+  .post-body blockquote {
+    margin: 24px 0; padding: 4px 0 4px 20px; border-left: 3px solid #A0C982;
+    color: oklch(0.4 0.008 90); font-style: italic;
+  }
+  .post-body img { border-radius: 8px; border: 1px solid oklch(0.85 0.006 90); margin: 24px 0; }
+  .post-body code { background: oklch(0.93 0.006 90); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+
+  .post-cta {
+    margin-top: 64px; padding: 48px; border-radius: 16px; background: #3B4A30;
+    color: oklch(0.98 0.004 85); text-align: center;
+  }
+  .post-cta h2 { font-family: 'Tektur', sans-serif; font-weight: 700; font-size: 26px; margin: 0 0 12px; }
+  .post-cta p { font-size: 15px; opacity: 0.85; margin: 0 0 28px; }
+  .post-cta a {
+    display: inline-block; font-size: 15px; padding: 14px 28px; background: oklch(0.98 0.004 85);
+    color: #3B4A30; border-radius: 100px; text-decoration: none; font-weight: 500;
+  }
+
+  footer {
+    padding: 32px 48px; border-top: 1px solid oklch(0.85 0.006 90);
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-size: 13px; color: oklch(0.46 0.01 90); max-width: 1240px; margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110515935', 'ym');
+
+    ym(110515935, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/110515935" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<nav class="section-pad">
+  <a href="/index.html" class="logo-link">
+    <img src="/uploads/Logo.svg" alt="Ailana logo" width="22" height="22">
+    <span class="logo-text">Ailana Design Studio</span>
+  </a>
+  <div class="nav-right">
+    <a href="/blog/">Блог</a>
+    {% if page.translation_url %}<a href="{{ page.translation_url }}">{{ page.translation_lang | upcase }}</a>{% endif %}
+    <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" class="nav-contact-btn">{% if page.lang == 'ky' %}Кайрылуу{% else %}Связаться{% endif %}</a>
+  </div>
+</nav>
+
+<main>
+  <div class="breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    <a href="/index.html">{% if page.lang == 'ky' %}Башкы бет{% else %}Главная{% endif %}</a>
+    <span class="sep">/</span>
+    <a href="/blog/">Блог</a>
+    <span class="sep">/</span>
+    <span class="current">{{ page.title }}</span>
+  </div>
+
+  <div class="post-hero">
+    <div class="eyebrow">
+      <span></span>
+      <span>{{ page.date | date: "%-d %B %Y" }}</span>
+    </div>
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}<p class="intro">{{ page.description }}</p>{% endif %}
+  </div>
+
+  <div class="post-body">
+    {{ content }}
+  </div>
+
+  <div class="post-cta">
+    <h2>{% if page.lang == 'ky' %}Долбоорду талкуулайлы{% else %}Обсудим ваш проект{% endif %}</h2>
+    <p>{% if page.lang == 'ky' %}Бишкектеги толук циклдүү дизайн студиясы{% else %}Дизайн-студия полного цикла в Бишкеке{% endif %}</p>
+    <a href="/index.html#contact">{% if page.lang == 'ky' %}Байланышуу{% else %}Связаться →{% endif %}</a>
+  </div>
+</main>
+
+<footer class="section-pad">
+  <span>© {{ page.date | date: "%Y" }} Ailana Design Studio</span>
+  <span>{% if page.lang == 'ky' %}Алыстан · Бишкек{% else %}Удалённо · Бишкек{% endif %}</span>
+</footer>
+
+</body>
+</html>
