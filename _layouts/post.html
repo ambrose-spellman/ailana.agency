@@ -170,9 +170,15 @@
   </a>
   <div class="nav-right">
     <a href="/blog/">Блог</a>
+    {% assign ru_href = "/blog/" %}
+    {% assign ky_href = "/blog/" %}
+    {% if page.lang == "ru" %}{% assign ru_href = page.url %}{% endif %}
+    {% if page.lang == "ky" %}{% assign ky_href = page.url %}{% endif %}
+    {% if page.translation_lang == "ru" %}{% assign ru_href = page.translation_url %}{% endif %}
+    {% if page.translation_lang == "ky" %}{% assign ky_href = page.translation_url %}{% endif %}
     <div class="lang-switch">
-      <a href="{% if page.lang == 'ru' %}{{ page.url }}{% elsif page.translation_lang == 'ru' %}{{ page.translation_url }}{% else %}/blog/{% endif %}" class="{% if page.lang == 'ru' %}active{% endif %}">RU</a>
-      <a href="{% if page.lang == 'ky' %}{{ page.url }}{% elsif page.translation_lang == 'ky' %}{{ page.translation_url }}{% else %}/blog/{% endif %}" class="{% if page.lang == 'ky' %}active{% endif %}">KY</a>
+      <a href="{{ ru_href }}" class="{% if page.lang == 'ru' %}active{% endif %}">RU</a>
+      <a href="{{ ky_href }}" class="{% if page.lang == 'ky' %}active{% endif %}">KY</a>
     </div>
     <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" class="nav-contact-btn">{% if page.lang == 'ky' %}Кайрылуу{% else %}Связаться{% endif %}</a>
   </div>
