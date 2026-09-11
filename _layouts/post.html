@@ -73,14 +73,16 @@
   .nav-right { display: flex; align-items: center; gap: 14px; font-size: 13.5px; }
   .nav-right a { text-decoration: none; color: oklch(0.4 0.008 90); }
   .nav-right a:hover { color: #3B4A30; }
+  .nav-right a.current { color: #3B4A30; font-weight: 600; }
   .lang-switch {
     display: flex; align-items: center; border: 1px solid oklch(0.8 0.008 90);
     border-radius: 100px; padding: 3px; gap: 2px;
   }
-  .lang-switch a {
+  .lang-switch a, .lang-switch span {
     font-size: 12.5px; padding: 6px 11px; border-radius: 100px;
     color: oklch(0.4 0.008 90); font-weight: 500; text-decoration: none;
   }
+  .lang-switch span { color: oklch(0.75 0.008 90); cursor: default; }
   .lang-switch a.active { background: #3B4A30; color: oklch(0.98 0.004 85); }
   .nav-contact-btn {
     font-size: 14px; padding: 9px 18px; border: 1px solid #3B4A30; border-radius: 100px;
@@ -169,7 +171,7 @@
     <span class="logo-text">Ailana Design Studio</span>
   </a>
   <div class="nav-right">
-    <a href="/blog/">Блог</a>
+    <a href="/blog/" class="current">Блог</a>
     {% assign ru_href = "/blog/" %}
     {% assign ky_href = "/blog/" %}
     {% if page.lang == "ru" %}{% assign ru_href = page.url %}{% endif %}
@@ -177,6 +179,7 @@
     {% if page.translation_lang == "ru" %}{% assign ru_href = page.translation_url %}{% endif %}
     {% if page.translation_lang == "ky" %}{% assign ky_href = page.translation_url %}{% endif %}
     <div class="lang-switch">
+      <span>EN</span>
       <a href="{{ ru_href }}" class="{% if page.lang == 'ru' %}active{% endif %}">RU</a>
       <a href="{{ ky_href }}" class="{% if page.lang == 'ky' %}active{% endif %}">KY</a>
     </div>
