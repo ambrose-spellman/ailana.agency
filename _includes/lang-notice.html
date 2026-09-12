@@ -1,0 +1,12 @@
+<div id="lang-notice" class="lang-notice" role="status" aria-live="polite"></div>
+<script>
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-notice]');
+    if (!btn) return;
+    var notice = document.getElementById('lang-notice');
+    notice.textContent = btn.getAttribute('data-notice');
+    notice.classList.add('show');
+    clearTimeout(notice._t);
+    notice._t = setTimeout(function () { notice.classList.remove('show'); }, 4500);
+  });
+</script>

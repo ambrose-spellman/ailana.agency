@@ -57,11 +57,20 @@
     display: flex; align-items: center; border: 1px solid oklch(0.8 0.008 90);
     border-radius: 100px; padding: 3px; gap: 2px;
   }
-  .lang-switch span {
-    font-size: 12.5px; padding: 9px 13px; border-radius: 100px;
-    color: oklch(0.75 0.008 90); font-weight: 500; cursor: default;
+  .lang-switch a, .lang-switch button {
+    font-size: 12.5px; padding: 9px 13px; border-radius: 100px; border: none;
+    color: oklch(0.4 0.008 90); font-weight: 500; text-decoration: none;
+    background: transparent; cursor: pointer; font-family: inherit;
   }
-  .lang-switch span.active { background: #3B4A30; color: oklch(0.98 0.004 85); }
+  .lang-switch a.active { background: #3B4A30; color: oklch(0.98 0.004 85); }
+  .lang-notice {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(12px);
+    max-width: 90vw; background: #3B4A30; color: oklch(0.98 0.004 85);
+    padding: 14px 22px; border-radius: 100px; font-size: 14px; text-align: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1000; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .lang-notice.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .nav-contact-btn {
     font-size: 14px; padding: 9px 18px; border: 1px solid #3B4A30; border-radius: 100px;
     text-decoration: none; white-space: nowrap;
@@ -141,9 +150,9 @@
   </div>
   <div class="nav-right">
     <div class="lang-switch">
-      <span>EN</span>
-      <span class="active">RU</span>
-      <span>KY</span>
+      <button type="button" data-notice="We don't have this blog in English yet — we're working on it.">EN</button>
+      <a href="/blog/" class="active">RU</a>
+      <button type="button" data-notice="Бул блогдун кыргызча версиясы азырынча жок — биз үстүндө иштеп жатабыз.">KY</button>
     </div>
     <a href="https://wa.me/996557475741" target="_blank" rel="noopener noreferrer" class="nav-contact-btn">Связаться</a>
     <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu-overlay" style="background: none; border: none; cursor: pointer; padding: 4px; align-items: center; justify-content: center;">
@@ -220,6 +229,8 @@
   <span>© {{ 'now' | date: "%Y" }} Ailana Design Studio</span>
   <span>Удалённо · Бишкек</span>
 </footer>
+
+{% include lang-notice.html %}
 
 </body>
 </html>
